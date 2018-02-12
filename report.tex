@@ -19,14 +19,73 @@ Comments here
 
 \begin{document}
 	\maketitle
-	 \tikzstyle{EntitySet}=[rectangle,draw,fill=gray,node distance=8em]
-    \tikzstyle{Attribute}=[ellipse,draw,fill=none,node distance=7em]
-    \tikzstyle{Relationship}=[diamond,draw,fill=none, node distance=13em,aspect=3]
+	 \tikzstyle{EntitySet}=[rectangle,draw,fill={rgb:red,4;green,2;blue,1;white,9},node distance=8em]
+    \tikzstyle{Attribute}=[ellipse,draw,fill={rgb:red,1;green,1;blue,1;white,100},node distance=7em]
+    \tikzstyle{Relationship}=[diamond,draw,fill=none, node distance=6em,aspect=3]
     \tikzstyle{OneLine}=[draw]
     \tikzstyle{ManyLine}=[draw,-latex',thick]
 
 	
 	\section{E/R Diagram}
 	\begin{tikzpicture}
+
+
+%Construct the entity->attribute relations
+
+%%Students (SID, Name, gender, email), 
+\node[EntitySet](students){Students};
+\node[Attribute, above of=students](sid){\uline{SID}};
+\node[Attribute, left of=sid](name){Name};
+\node[Attribute, right of=sid,yshift=-3em,xshift=3em](gender){Gender};
+\node[Attribute, right of=sid](email){EMail};
+
+\path[OneLine](sid)--(students);
+\path[OneLine](email)--(students);
+\path[OneLine](name)--(students);
+\path[OneLine](gender)--(students);
+
+%%Projects (PID, Name)
+\node[EntitySet, below of=students](projects){Projects};
+\node[Attribute,left of=projects](pid){\uline{PID}};
+\node[Attribute, right of=projects](name){Name};
+
+\path[OneLine](pid)--(projects);
+\path[OneLine](name)--(projects);
+
+%%Teams (TID, LeaderID, NoOfMembers), 
+\node[EntitySet, below of=projects](teams){Teams};
+\node[Attribute,left of=teams](tid){\uline{TID}};
+\node[Attribute, below of=teams](leaderid){LeaderID};
+\node[Attribute, right of=teams, xshift=2em, text width=4em](noofmem){NoOf Members};
+
+\path[OneLine](tid)--(teams);
+\path[OneLine](leaderid)--(teams);
+\path[OneLine](noofmem)--(teams);
+
+%%Members (SID, TID, dateJoined,role), 
+\node[Relationship, right of=students, xshift=15em](members){Members};
+\node[Attribute, right of=members](sid_mem){\uline{SID}};
+\node[Attribute, above of=members](tid){TID};
+\node[Attribute, left of=members](datejoined){dateJoined};
+\node[Attribute, left of=tid](role){Role};
+
+\path[OneLine](sid_mem)--(members);
+\path[OneLine](tid)--(members);
+\path[OneLine](datejoined)--(members);
+\path[OneLine](role)--(members);
+%%Demos (SID, TID, Date, time, grade)
+
+\node[EntitySet, below of=members, yshift=-5em](demos){Demos};
+\node[Attribute, right of=demos](sid_dem){\uline{SID}};
+\node[Attribute, above of=demos](tid_dem){TID};
+\node[Attribute, left of=demos](time){Time};
+\node[Attribute, left of=tid_dem](grade){Grade};
+
+\path[OneLine](sid_mem)--(members);
+\path[OneLine](tid)--(members);
+\path[OneLine](datejoined)--(members);
+\path[OneLine](role)--(members);
+
+
 	\end{tikzpicture}
 \end{document}

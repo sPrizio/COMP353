@@ -5,19 +5,35 @@
 \margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf0 \\iffalse \
+\f0\fs24 \cf0 \
+\\iffalse \
 Comments here\
 \\fi\
 \
-\\documentclass\{article\}\
-\\usepackage\{\}\
-\\dottedcontents\{section\}[1.5in]\{\\bfseries\\large\}\{1.5in\}\{10pt\}\
+\\documentclass[12pt]\{article\}\
+\\usepackage\{ulem,tikz, \}\
+\\usepackage\{listings, geometry\}\
+\\usetikzlibrary\{shapes,shadows,arrows\}\
+\\geometry\{\
+    a4paper,\
+    total=\{170mm,257mm\},\
+    left=20mm,right=20mm,\
+    top=20mm,\
+\}\
 \
-\\title\{\'97title\'97\}\
-\\author\{My Name\}\
+\\title\{Comp353 Warm-Up Report\}\
+\\author\{Kai, Stephen, Giovanni, Nizar\}\
 \
 \\begin\{document\}\
 	\\maketitle\
+	 \\tikzstyle\{EntitySet\}=[rectangle,draw,fill=gray,node distance=8em]\
+    \\tikzstyle\{Attribute\}=[ellipse,draw,fill=none,node distance=7em]\
+    \\tikzstyle\{Relationship\}=[diamond,draw,fill=none, node distance=13em,aspect=3]\
+    \\tikzstyle\{OneLine\}=[draw]\
+    \\tikzstyle\{ManyLine\}=[draw,-latex',thick]\
+\
 	\
-	\\section\{\}\
+	\\section\{E/R Diagram\}\
+	\\begin\{tikzpicture\}\
+	\\end\{tikzpicture\}\
 \\end\{document\}}

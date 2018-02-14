@@ -4,9 +4,9 @@ Comments here
 \fi
 
 \documentclass[12pt]{article}
-\usepackage{ulem,tikz, }
-\usepackage{listings, geometry}
-\usetikzlibrary{shapes,shadows,arrows}
+\usepackage{ulem,listings}
+\usepackage{geometry, tikz}
+\usetikzlibrary{shapes,shadows,arrows.meta}
 \geometry{
     a4paper,
     total={170mm,257mm},
@@ -31,9 +31,10 @@ Comments here
     \tikzset{Relationship/.style={Item, diamond,draw,fill={rgb:red,0;blue,3;green,1;white,9},,drop shadow={shadow xshift=.25em,  shadow yshift=-.2em}, node distance=10em,aspect=3}}
 	\tikzset{WeakRelationship/.style={Relationship, Weak, Item}}
     
-    \tikzstyle{OneLine}=[draw, line width=0.21em]
-    \tikzstyle{AttributeLine}=[draw, line width=0.09em]
-    \tikzstyle{ManyLine}=[draw,-latex',thick, line width=0.21em]
+    %%
+    \tikzset{OneLine/.style={draw, =Stealth, line width=0.21em}}
+ 	\tikzset{AttributeLine/.style={draw, =Latex, line width=0.09em}}
+    \tikzset{ManyLine/.style={draw={rgb:red,1;green,1;blue,1;black,10}, -{Stealth[fill={rgb:red,0;blue,0;green,1;black,4}, width=2em]},thick, line width=0.21em}}
 	
 	\section{E/R Diagram}
 	\noindent

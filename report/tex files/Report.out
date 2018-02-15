@@ -1,4 +1,6 @@
 \BOOKMARK [1][-]{section.1}{Assumptions}{}% 1
 \BOOKMARK [1][-]{section.2}{Constraints}{}% 2
-\BOOKMARK [1][-]{section.3}{E/R Diagram}{}% 3
-\BOOKMARK [1][-]{section.4}{Queries}{}% 4
+\BOOKMARK [1][-]{section.3}{E/R Diagram and Schema}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Enitity Relationship Diagram}{section.3}% 4
+\BOOKMARK [2][-]{subsection.3.2}{Schemas}{section.3}% 5
+\BOOKMARK [1][-]{section.4}{Queries}{}% 6

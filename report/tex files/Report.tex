@@ -57,7 +57,7 @@
 	
 	\section{Assumptions}
 	There are five relations:
-\begin{enumerate}[label={\roman*}]
+\begin{enumerate}[label={\roman*.}]
 	\item Students, 
 	\item Teams,
 	\item Members,
@@ -81,9 +81,8 @@
 	
 	
 	
-	
-	
-	
+		
+	\pagebreak
 	
 	
 		\newcommand{\XSHIFT}{7em}
@@ -102,11 +101,11 @@
  	\tikzset{AttributeLine/.style={draw, =Latex, line width=0.09em}}
     \tikzset{ManyLine/.style={draw={rgb:red,1;green,1;blue,1;black,10}, -{Stealth[fill={rgb:red,0;blue,0;green,1;black,6}, width=2em]},thick, line width=0.21em}}	
 	
-	\section{E/R Diagram}
-	\noindent
-	\begin{tikzpicture}
+	\section{E/R Diagram and Schema}
+	\subsection{Enitity Relationship Diagram}
+	\begin{center}
+		\begin{tikzpicture}
 %Construct the entity->attribute relations
-
 %%Students (SID, Name, gender, email), 
 \node[EntitySet](students){\textbf{Students}};
 \node[Attribute, above of=students](sid){\uline{SID}};
@@ -169,7 +168,15 @@
 \path[ManyLine](members)--(teams);
 \path[ManyLine](members)-|(demos);
 
-	\end{tikzpicture}
+		\end{tikzpicture}
+	
+	\end{center}
+\subsection{Schemas}
+	Students (\uline{SID}, Name, gender, email)\\
+Projects (\uline{PID}, Name)\\
+Teams (\uline{TID}, LeaderID, NoOfMembers)\\
+Members (\uline{SID}, \uline{TID}, dateJoined, role)\\
+Demos (\uline{SID}, \uline{TID}, Date, time, grade)\\
 	\pagebreak
 	
 	\section{Queries}

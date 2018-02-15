@@ -25,16 +25,16 @@ Comments here
 	
 	\tikzset{Item/.style={line width=0.14em}}
 	\tikzset{Weak/.style={style=dashed}}
-	\tikzset{EntitySet/.style={Item, rectangle,draw,fill={rgb:red,4;green,2;blue,1;white,9},inner sep=0.8em,drop shadow={shadow xshift=.5em,  shadow yshift=-.2em},node distance=10em}}
+	\tikzset{EntitySet/.style={Item, rectangle,draw,fill={rgb:red,4;green,2;blue,1;white,9},inner sep=0.8em,drop shadow={shadow xshift=.5em,  shadow yshift=-.2em},node distance=14em}}
 	\tikzset{WeakEntitySet/.style={EntitySet, Weak, Item}}
-    \tikzset{Attribute/.style={Item,ellipse,draw,fill={rgb:red,1;green,1;blue,1;white,100},,drop shadow={shadow xshift=.35em, shadow yshift=-.1em},node distance=5em}}
+    \tikzset{Attribute/.style={Item,ellipse,draw,fill={rgb:red,1;green,1;blue,1;white,35},,drop shadow={shadow xshift=.35em, shadow yshift=-.1em},node distance=5.0em}}
     \tikzset{Relationship/.style={Item, diamond,draw,fill={rgb:red,0;blue,3;green,1;white,9},,drop shadow={shadow xshift=.25em,  shadow yshift=-.2em}, node distance=10em,aspect=3}}
 	\tikzset{WeakRelationship/.style={Relationship, Weak, Item}}
     
     %%
     \tikzset{OneLine/.style={draw, =Stealth, line width=0.21em}}
  	\tikzset{AttributeLine/.style={draw, =Latex, line width=0.09em}}
-    \tikzset{ManyLine/.style={draw={rgb:red,1;green,1;blue,1;black,10}, -{Stealth[fill={rgb:red,0;blue,0;green,1;black,4}, width=2em]},thick, line width=0.21em}}
+    \tikzset{ManyLine/.style={draw={rgb:red,1;green,1;blue,1;black,10}, -{Stealth[fill={rgb:red,0;blue,0;green,1;black,6}, width=2em]},thick, line width=0.21em}}
 	
 	\section{E/R Diagram}
 	\noindent
@@ -80,7 +80,7 @@ Comments here
 \path[AttributeLine](grade)--(demos);
 
 %%Projects (PID, Name)
-\node[EntitySet, below of=members,right of=members,xshift=\XSHIFT](projects){\textbf{Projects}};
+\node[EntitySet, below of=members,left of=demos, xshift=\XSHIFT, yshift=-3.5em](projects){\textbf{Projects}};
 \node[Attribute,below of=projects](pid){\uline{PID}};
 \node[Attribute, right of=projects,xshift=1em](name){Name};
 
@@ -89,8 +89,8 @@ Comments here
 
 %%Teams (TID, LeaderID, NoOfMembers), 
 \node[EntitySet, below of=members,yshift=\YSHIFT](teams){\textbf{Teams}};
-\node[Attribute,left of=teams](tid){\uline{TID}};
-\node[Attribute, below of=teams](leaderid){LeaderID};
+\node[Attribute,left of=teams, xshift=-2.0em](tid){\uline{TID}};
+\node[Attribute, below of=teams, yshift=-0.5em, xshift=1.5em](leaderid){LeaderID};
 \node[Attribute, below of=teams, left of=teams, xshift=-2em, text width=4em](noofmem){NoOf Members};
 
 \path[AttributeLine](tid)--(teams);

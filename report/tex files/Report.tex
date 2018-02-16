@@ -66,10 +66,9 @@
 \end{enumerate}
 	
 	 Members is the many to one relationship between Students and Teams.
-	The projects entity does not have any relation to the other entities.
+	The projects entity does not have any relation to the other entities. The underlined attributes are set to not null as they are keys. Many attributes are varchar types since they could vary in length and may contain letters, numbers and symbols. 
 	
 	
-
 	\section{Constraints}
 	\begin{enumerate}[label={--}]
 	\item Every student belongs to one and only team.
@@ -213,6 +212,8 @@ Demos (\uline{SID}, \uline{TID}, Date, time, grade)\\
 			\end{tabular}
 		\end{center}
 		
+		\pagebreak
+		
 		\item For each team, list its members
 		\begin{verbatim}
 		SELECT members.sid, students.name, members.tid 
@@ -278,6 +279,8 @@ Demos (\uline{SID}, \uline{TID}, Date, time, grade)\\
 			\end{tabular}
 		\end{center}
 		
+				\pagebreak
+		
 		\item Who was not present in the demo of a team?
 		
 		\begin{verbatim}
@@ -332,6 +335,8 @@ Demos (\uline{SID}, \uline{TID}, Date, time, grade)\\
 				\hline
 			\end{tabular}
 		\end{center}
+		
+				\pagebreak
 		
 		\item Given a TID, list the names of the members
 		
@@ -389,6 +394,8 @@ Demos (\uline{SID}, \uline{TID}, Date, time, grade)\\
 				\hline
 			\end{tabular}
 		\end{center}
+		
+				\pagebreak
 		
 		\item For each team that is not complete, list the TID and the capacity to increase
 		

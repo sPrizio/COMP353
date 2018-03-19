@@ -10,40 +10,40 @@ Many subordinates to one supervisor.
 Dependancy information in a seperate table for ease of exporting to insurers
 
 
-___Department___
-ID: PK int
-NAME: MEDIMUMTEXT UNIQUE;
-MANAGER:INT NOT NULL[BLUE]
+___Department___ <br>
+ID: PK int<br>
+NAME: MEDIMUMTEXT UNIQUE;<br>
+MANAGER:INT NOT NULL[BLUE]<br>
+<br>
+___LOCATIONS___<br>
+ID:PK Loc_id<br>
+NAME[ADDRES]: Mediumtext unique<br>
+<br>
+___Project___<br>
+ID: PK INT<br>
+NAME:MEDIUMTEXT UNIQUE    ----- The Building it's in<br>
+ADDRESS: MEIDUMTEXT       ----- Where it is in the world      [BLUE]<br>
+<br>
+___EMPLOYEE___<br>
+ID: PK ID<br>
+NAME: MEDIUM TEXT<br>
+SIN: INT UNIQUE<br>
+BIRTHDATE:DATE<br>
+ADDRESS:MEDIUMTEXT<br>
+PHONE:CHAR(12)<br>
+SALARY:INT<br>
+GENDER:CHAR(1)            'M' 'F' 'O'<br>
+DEPT_ID: INT      [BLUE]<br>
+<br>
+___Dependents___<br>
+ID: PK ID<br>
+NAME: MEDIUM TEXT<br>
+DIN: INT UNIQUE<br>
+BIRTHDATE:DATE<br>
+GENDER: CHAR(1)<br>
+Employee_ID: int     [BLUE]<br>
 
-___LOCATIONS___
-ID:PK Loc_id
-NAME[ADDRES]: Mediumtext unique
-
-___Project___
-ID: PK INT
-NAME:MEDIUMTEXT UNIQUE    ----- The Building it's in
-ADDRESS: MEIDUMTEXT       ----- Where it is in the world      [BLUE]
-
-___EMPLOYEE___
-ID: PK ID
-NAME: MEDIUM TEXT
-SIN: INT UNIQUE
-BIRTHDATE:DATE
-ADDRESS:MEDIUMTEXT
-PHONE:CHAR(12)
-SALARY:INT
-GENDER:CHAR(1)            'M' 'F' 'O'
-DEPT_ID: INT      [BLUE]
-
-___Dependents___
-ID: PK ID
-NAME: MEDIUM TEXT
-DIN: INT UNIQUE
-BIRTHDATE:DATE
-GENDER: CHAR(1)
-Employee_ID: int     [BLUE]
-
-Relation tables of 
-Locted in | Responsible projucts . Responsible for . Works on  . Supervisor Role . 
-L_ID D_ID | 
-Many one  | 
+Relation tables of <br>
+Locted in | Responsible projucts . Responsible for . Works on  . Supervisor Role . <br>
+L_ID D_ID | <br>
+Many one  | <br>

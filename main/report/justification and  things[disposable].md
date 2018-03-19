@@ -1,13 +1,15 @@
-Employee SIN is not a primary key as it is an important attribute that needs to stay hidden
-Gender specified as it's legality['M','F','O']
-Departments can't exist without a manager
-Locations on a new table since departments can be in a list of locations and projects can be in a list of locations.
-There's always a main department who's making the projects. Many to one relation.
-Theres many locations that can fit into one department. Many to one relation
-A project can only be in so many locations
-A supervisor and subordinates is a role of an employee.
-Many subordinates to one supervisor.
-Dependancy information in a seperate table for ease of exporting to insurers
+Employee SIN is not a primary key as it is an important attribute that needs to stay hidden<br>
+Gender specified as it's legality['M','F','O']<br>
+Departments can't exist without a manager<br>
+Locations on a new table since departments can be in a list of locations and projects can be in a list of locations.<br>
+There's always a main department who's making the projects. Many to one relation.<br>
+Theres many locations that can fit into one department. Many to one relation<br>
+A project can only be in so many locations<br>
+A supervisor and subordinates is a role of an employee.<br>
+Many subordinates to one supervisor.<br>
+Dependancy information in a seperate table for ease of exporting to insurers<br>
+<hr/>
+<br>
 
 
 ___Department___ <br>

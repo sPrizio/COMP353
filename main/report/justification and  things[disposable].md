@@ -1,5 +1,5 @@
 Employee SIN is not a primary key as it is an important attribute that needs to stay hidden<br>
-Gender specified as it's legality['M','F','O']<br>
+Gender specified as it's possibly a legality['M','F','O']<br>
 Departments can't exist without a manager<br>
 Locations on a new table since departments can be in a list of locations and projects can be in a list of locations.<br>
 There's always a main department who's making the projects. Many to one relation.<br>

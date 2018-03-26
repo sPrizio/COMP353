@@ -1,0 +1,19 @@
+body {
+    background-color: whitesmoke;
+}
+
+nav {
+    background-color: #388e3c;
+}
+
+a {
+    color: #388e3c;
+}
+
+.align-left {
+    text-align: left !important;
+}
+
+.brand-logo {
+    margin-left: 100px;
+}

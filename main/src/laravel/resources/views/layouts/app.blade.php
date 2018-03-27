@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
     <!-- Fonts -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:100,600">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Raleway:400,600">
 
     <title>COMP353 | @yield('title')</title>
 </head>
@@ -19,11 +19,12 @@
 
 <nav>
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo">COMP 353</a>
+        <a href="/" class="brand-logo">COMP 353</a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="/departments">Departments</a></li>        
             <li><a href="/employees">Employees</a></li>
             <li><a href="/projects">Projects</a></li>
+            <li><a href="/locations">Locations</a></li>
         </ul>
     </div>
 </nav>

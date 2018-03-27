@@ -1,5 +1,6 @@
 body {
     background-color: whitesmoke;
+    
 }
 
 nav {
@@ -14,6 +15,47 @@ a {
     text-align: left !important;
 }
 
+.align-center {
+    text-align: center;
+}
+
+.align-right {
+    text-align: right;
+}
+
 .brand-logo {
     margin-left: 100px;
+}
+
+.card .card-title {
+    font-size: 2.5em;
+}
+
+.card .card-subtitle {
+    font-size: 2em;
+}
+
+.btn {
+    background-color: #388e3c;
+}
+
+.attribute-category {
+    font-weight: bold;
+    font-size: 1.75em;
+    padding-left: 50px;
+    font-family: "Raleway", sans-serif;
+}
+
+.attribute-container {
+    font-size: 1.25em;
+    margin-left: 100px;
+    border-left: 2px solid #388e3c;
+}
+
+.attribute-container .attribute {
+    padding: 5px 0 5px 15px;
+}
+
+.faded {
+    border-color: rgba(0, 0, 0, 0.15);
 }

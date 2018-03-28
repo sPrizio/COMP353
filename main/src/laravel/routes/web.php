@@ -11,6 +11,11 @@
 |
 */
 
+//  define constants
+define("DEPARTMENTS", 'departments');
+define("DEPARTMENT", 'department');
+define("EMPLOYEES", 'employees');
+
 //  home page
 Route::get('/', function () {
     return view('welcome');
@@ -21,7 +26,7 @@ Route::get('/employees', function() {
     $employees = DB::select('SELECT * FROM employee ORDER BY id');
     $departments = DB::select('SELECT * FROM department');
 
-    return view('employee/employees', ['employees' => $employees, 'departments' => $departments]);
+    return view('employee/employees', [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
 });
 
 //  view an employee by id
@@ -47,15 +52,10 @@ Route::get('/employee/view/{id}', function($id) {
             $supervisor[0] = null;
         }
 
-        return view('employee/employee', ['employee' => $employee[0], 'departments' => $departments, 'dependents' => $dependents, 'project' => $project[0], 'supervisor' => $supervisor[0]]);        
+        return view('employee/employee', ['employee' => $employee[0], DEPARTMENTS => $departments, 'dependents' => $dependents, 'project' => $project[0], 'supervisor' => $supervisor[0]]);
     }
 
     return 'No Employee was found with that ID.';
-});
-
-//  create employee endpoint
-Route::get('/employee/create', function() {
-    return view('employee/create');
 });
 
 //  view all departments
@@ -63,20 +63,21 @@ Route::get('/departments', function() {
     $departments = DB::select('SELECT * FROM department ORDER BY id');
     $employees = DB::select('SELECT * FROM employee');
 
-    return view('department/departments', ['departments' => $departments, 'employees' => $employees]);
+    return view('department/departments', [DEPARTMENTS => $departments, EMPLOYEES => $employees]);
 });
 
 //  view a department by id
 Route::get('/department/view/{id}', function($id) {
-    return 'YUPPERS';
-});
+    $department = DB::select('SELECT * FROM department WHERE id = :id', ['id' => $id]);
+    $employee_list = DB::select('SELECT * FROM employee');
+    
+    if (count($department)) {
+        $locations = DB::select('SELECT * FROM located_in, location WHERE location_id = id AND department_id = :id', ['id' => $id]);
+        $projects = DB::select('SELECT * FROM responsible_for, project WHERE project_id = id AND department_id = :id ORDER BY project_id', ['id' => $id]);
+        $employees = DB::select('SELECT * FROM comp353_main_project.employee WHERE department_id = :id ORDER BY last_name', ['id' => $id]);
 
-//  view all projects
-Route::get('/projects', function() {
-
-});
-
-//  view a project by id
-Route::get('/project/view/{id}', function($id) {
-
+        return view('department/department', [DEPARTMENT => $department[0], 'employee_list' => $employee_list, 'locations' => $locations, 'projects' => $projects, EMPLOYEES => $employees]);
+    }
+    
+    return 'No Department was found with that ID.';
 });

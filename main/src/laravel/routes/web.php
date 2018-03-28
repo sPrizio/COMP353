@@ -81,3 +81,13 @@ Route::get('/department/view/{id}', function($id) {
     
     return 'No Department was found with that ID.';
 });
+
+//  view all projects
+Route::get('/projects', function() {
+    $projects = DB::select('SELECT * FROM project ORDER BY id');
+    $locations = DB::select('SELECT * FROM location');
+
+    return view('project/projects', ['projects' => $projects, 'locations' => $locations]);
+});
+
+//  view a project by id

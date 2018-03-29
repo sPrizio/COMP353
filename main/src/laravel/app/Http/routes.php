@@ -108,3 +108,10 @@ Route::get('/project/view/{id}', function($id) {
 
     return 'No Project was found with that ID.';
 });
+
+//  view all locations
+Route::get('/locations', function() {
+    $locations = DB::select('SELECT * FROM location ORDER BY id');
+
+    return view('location/locations', ['locations' => $locations]);
+});

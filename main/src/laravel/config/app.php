@@ -122,6 +122,7 @@ return [
     */
 
     'providers' => [
+        'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 
         /*
          * Laravel Framework Service Providers...

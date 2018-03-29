@@ -16,6 +16,6 @@ Afterwards, ```cd``` into the laravel directory in the project that you download
 
 will start the project. The project can be viewed at: 
 
-```localhost:8000/employees```
+```localhost:8000```
 
 Look at the Laravel documentation to see how it all works!

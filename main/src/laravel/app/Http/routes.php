@@ -25,7 +25,7 @@ Route::get('/', function () {
 });
 
 //  view all employees
-Route::get('/employees', function() {
+Route::get('/employees', function () {
     $employees = DB::select('SELECT * FROM employee ORDER BY id');
     $departments = DB::select(DEPARTMENT_SELECT);
 
@@ -33,7 +33,7 @@ Route::get('/employees', function() {
 });
 
 //  view an employee by id
-Route::get('/employee/view/{id}', function($id) {
+Route::get('/employee/view/{id}', function ($id) {
     $employee = DB::select('SELECT * FROM employee WHERE id = :id', ['id' => $id]);
 
     if (count($employee)) {
@@ -62,7 +62,7 @@ Route::get('/employee/view/{id}', function($id) {
 });
 
 //  view all departments
-Route::get('/departments', function() {
+Route::get('/departments', function () {
     $departments = DB::select('SELECT * FROM department ORDER BY id');
     $employees = DB::select('SELECT * FROM employee');
 
@@ -70,10 +70,10 @@ Route::get('/departments', function() {
 });
 
 //  view a department by id
-Route::get('/department/view/{id}', function($id) {
+Route::get('/department/view/{id}', function ($id) {
     $department = DB::select('SELECT * FROM department WHERE id = :id', ['id' => $id]);
     $employee_list = DB::select('SELECT * FROM employee');
-    
+
     if (count($department)) {
         $locations = DB::select('SELECT * FROM located_in, location WHERE location_id = id AND department_id = :id', ['id' => $id]);
         $projects = DB::select('SELECT * FROM responsible_for, project WHERE project_id = id AND department_id = :id ORDER BY project_id', ['id' => $id]);
@@ -81,12 +81,12 @@ Route::get('/department/view/{id}', function($id) {
 
         return view('department/department', [DEPARTMENT => $department[0], 'employee_list' => $employee_list, LOCATIONS => $locations, 'projects' => $projects, EMPLOYEES => $employees]);
     }
-    
+
     return 'No Department was found with that ID.';
 });
 
 //  view all projects
-Route::get('/projects', function() {
+Route::get('/projects', function () {
     $projects = DB::select('SELECT * FROM project ORDER BY id');
     $locations = DB::select('SELECT * FROM location');
 
@@ -94,7 +94,7 @@ Route::get('/projects', function() {
 });
 
 //  view a project by id
-Route::get('/project/view/{id}', function($id) {
+Route::get('/project/view/{id}', function ($id) {
     $project = DB::select('SELECT * FROM project WHERE id = :id', ['id' => $id]);
 
     if (count($project)) {
@@ -102,7 +102,7 @@ Route::get('/project/view/{id}', function($id) {
         $departments = DB::select(DEPARTMENT_SELECT);
         $department = DB::select('SELECT * FROM responsible_for, department WHERE department_id = id AND project_id = :id;', ['id' => $id]);
         $employees = DB::select('SELECT * FROM works_on, employee WHERE id = employee_id AND project_id = :id ORDER BY id', ['id' => $id]);
-        
+
         return view('project/project', ['project' => $project[0], 'department' => $department[0], LOCATIONS => $locations, 'departments' => $departments, EMPLOYEES => $employees]);
     }
 
@@ -110,8 +110,23 @@ Route::get('/project/view/{id}', function($id) {
 });
 
 //  view all locations
-Route::get('/locations', function() {
+Route::get('/locations', function () {
     $locations = DB::select('SELECT * FROM location ORDER BY id');
 
     return view('location/locations', ['locations' => $locations]);
+});
+
+//  view a location by id
+Route::get('/location/view/{id}', function ($id) {
+    $location = DB::select('SELECT * FROM location WHERE id = :id', ['id' => $id]);
+
+    if (count($location)) {
+        $departments = DB::select('SELECT * FROM department WHERE id IN (SELECT department_id FROM located_in WHERE location_id = :id)', ['id' => $id]);
+        $projects = DB::select('SELECT * FROM project WHERE id IN (SELECT project_id FROM responsible_for WHERE department_id IN (SELECT department_id FROM located_in WHERE location_id = :id)) AND location_id = :id2', ['id' => $id, 'id2' => $id]);
+        $locations = DB::select('SELECT * FROM location');
+
+        return view('location/location', ['location' => $location[0], 'departments' => $departments, 'projects' => $projects, 'locations' => $locations]);
+    }
+
+    return ('No Location was found with that ID.');
 });

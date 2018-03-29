@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\DB;
+
 class Helper {
     
     /**
@@ -69,6 +71,16 @@ class Helper {
         }
 
         return 'Other';
+    }
+
+    public static function getProjectDepartment(int $id) {
+        $dept = DB::select('SELECT * FROM responsible_for, department WHERE department_id = id AND project_id = :id;', ['id' => $id]);
+
+        if (count($dept)) {
+            return ($dept[0]->name);
+        }
+
+        return 'None';
     }
 }
 

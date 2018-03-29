@@ -83,7 +83,7 @@
                         <a href='{{ URL("/project/view/{$project->id}") }}'>{{ $project->name }}</a>
                     </td>
                     <td class="align-left">
-                        <a href='{{ URL("/location/view/{$project->location_id}") }}'>{{ Helper::getLocationName($project->location_id, $locations) }}</a>
+                        {{ Helper::getLocationName($project->location_id, $locations) }}
                     </td>
                 </tr>
             @endforeach

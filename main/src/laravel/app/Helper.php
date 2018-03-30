@@ -24,6 +24,23 @@ class Helper {
     }
 
     /**
+     * Gets the id of the requested department
+     *
+     * @param string $deptartment department name
+     * @param array $depts list of departments
+     * @return int department id
+     */
+    public static function getDepartmentId(string $deptartment, array $depts) {
+        foreach ($depts as $dept) {
+            if ($dept->name == $deptartment) {
+                return ($dept->id);
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Returns the full name of a department manager given an id and list of employees
      * 
      * @param int $id - employee id
@@ -73,6 +90,12 @@ class Helper {
         return 'Other';
     }
 
+    /**
+     * Gets the department to which a project belongs
+     *
+     * @param int $id project id
+     * @return string project's departments
+     */
     public static function getProjectDepartment(int $id) {
         $dept = DB::select('SELECT * FROM responsible_for, department WHERE department_id = id AND project_id = :id;', ['id' => $id]);
 

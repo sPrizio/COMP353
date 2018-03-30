@@ -74,6 +74,7 @@ Route::get('/employee/create', function() {
     return view('employee/create', [DEPARTMENTS => $departments]);
 });
 
+//  create the employee via HTTP POST
 Route::post('/employee/create', function() {
     $error = false;
     $msg = "";
@@ -106,6 +107,7 @@ Route::post('/employee/create', function() {
         $error = true;
     }
 
+    //  display error message for incorrect form submission
     if ($error) {
         return $msg;
     }

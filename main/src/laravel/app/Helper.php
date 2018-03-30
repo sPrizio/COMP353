@@ -105,6 +105,18 @@ class Helper {
 
         return 'None';
     }
+
+    public static function duplicateSINChecker(int $sin) {
+        $sins = DB::select('SELECT sin FROM employee');
+
+        foreach ($sins as $s) {
+            if ($s == $sin) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 ?>

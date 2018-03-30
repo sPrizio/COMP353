@@ -17,11 +17,15 @@ use Illuminate\Support\Facades\Input;
 define("DEPARTMENTS", 'departments');
 define("DEPARTMENT", 'department');
 define("EMPLOYEES", 'employees');
+define("EMPLOYEE", 'employee');
 define("LOCATIONS", 'locations');
 define("PROJECTS", 'projects');
 
 define("DEPARTMENT_SELECT", 'SELECT * FROM department');
 define("LOCATION_SELECT", 'SELECT * FROM location');
+define("EMPLOYEE_SELECT", 'SELECT * FROM employee WHERE id = :id');
+
+define("EMPLOYEE_NOT_FOUND", 'No Employee was found with that ID.');
 
 //  home page
 Route::get('/', function () {
@@ -40,7 +44,7 @@ Route::get('/employees', function () {
 
 //  view an employee by id
 Route::get('/employee/view/{id}', function ($id) {
-    $employee = DB::select('SELECT * FROM employee WHERE id = :id', ['id' => $id]);
+    $employee = DB::select(EMPLOYEE_SELECT, ['id' => $id]);
 
     if (count($employee)) {
         //  get employee's dependents
@@ -61,10 +65,10 @@ Route::get('/employee/view/{id}', function ($id) {
             $supervisor[0] = null;
         }
 
-        return view('employee/employee', ['employee' => $employee[0], DEPARTMENTS => $departments, 'dependents' => $dependents, 'project' => $project[0], 'supervisor' => $supervisor[0]]);
+        return view('employee/employee', [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, 'dependents' => $dependents, 'project' => $project[0], 'supervisor' => $supervisor[0]]);
     }
 
-    return 'No Employee was found with that ID.';
+    return EMPLOYEE_NOT_FOUND;
 });
 
 //  create employee page
@@ -95,8 +99,20 @@ Route::post('/employee/create', function() {
         $error = true;
     }
 
+    if (Helper::duplicateSINChecker($sin)) {
+        $msg = 'Duplicate SIN detected!';
+
+        $error = true;
+    }
+
     if (!preg_match("/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/", $phone)) {
         $msg = 'That was not a valid phone number';
+
+        $error = true;
+    }
+
+    if (!preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $dob)) {
+        $msg = 'That was not a date of birth';
 
         $error = true;
     }
@@ -129,6 +145,110 @@ Route::post('/employee/create', function() {
     DB::insert('INSERT INTO employee (first_name, last_name, sin, date_of_birth, address, phone, salary, gender, department_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [$first_name, $last_name, $sin, $dob, $address, $phone, $salary, $g, $dept]);
 
     return view('employee/create', [DEPARTMENTS => $departments]);
+});
+
+Route::get('employee/{id}/edit', function ($id) {
+    $employee = DB::select(EMPLOYEE_SELECT, ['id' => $id]);
+
+    if (count($employee)) {
+        $departments = DB::select(DEPARTMENT_SELECT);
+
+        return view('employee/edit', [EMPLOYEE => $employee[0], DEPARTMENTS => $departments]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
+//  update the employee via HTTP POST
+Route::post('employee/{id}/edit', function ($id) {
+    $employee = DB::select(EMPLOYEE_SELECT, ['id' => $id]);
+
+    if (count($employee)) {
+        $error = false;
+        $msg = "";
+
+        $first_name = Input::get('first_name');
+        $last_name = Input::get('last_name');
+        $sin = Input::get('sin');
+        $dob = Input::get('dob');
+        $address = Input::get('address');
+        $phone = Input::get('phone');
+        $salary = Input::get('salary');
+        $gender = Input::get('gender');
+        $department = Input::get(DEPARTMENT);
+
+        if ($sin > 999999999 || $sin < 100000000) {
+            $msg = 'A Social Insurance Number must be exactly 9 digits.';
+
+            $error = true;
+        }
+
+        if (Helper::duplicateSINChecker($sin)) {
+            $msg = 'Duplicate SIN detected!';
+
+            $error = true;
+        }
+
+        if (!preg_match("/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/", $phone)) {
+            $msg = 'That was not a valid phone number';
+
+            $error = true;
+        }
+
+        if (!preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $dob)) {
+            $msg = 'That was not a date of birth';
+
+            $error = true;
+        }
+
+        if ($salary < 30000) {
+            $msg = 'Salary cannot be less than $30,000.';
+
+            $error = true;
+        }
+
+        //  display error message for incorrect form submission
+        if ($error) {
+            return $msg;
+        }
+
+        $departments = DB::select(DEPARTMENT_SELECT);
+
+        $g = null;
+        $dept = Helper::getDepartmentId($department, $departments);
+
+        if ($gender == "male") {
+            $g = "M";
+        } else if ($gender == "female") {
+            $g = "F";
+        } else {
+            $g = "O";
+        }
+
+        DB::update('UPDATE employee SET first_name = ?, last_name = ?, sin = ?, date_of_birth = ?, address = ?, phone = ?, salary = ?, gender = ?, department_id = ? WHERE id = ?', [$first_name, $last_name, $sin, $dob, $address, $phone, $salary, $g, $dept, $employee[0]->id]);
+
+        $employees = DB::select('SELECT * FROM employee ORDER BY id');
+
+        return view('employee/employees', [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
+//  deletes an employee from the db
+Route::post('/employee/{id}/delete', function ($id) {
+    $employee = DB::select(EMPLOYEE_SELECT, ['id' => $id]);
+
+    if (count($employee)) {
+        DB::delete('DELETE FROM employee WHERE id = :id', ['id' => $id]);
+
+        $employees = DB::select('SELECT * FROM employee ORDER BY id');
+        $departments = DB::select(DEPARTMENT_SELECT);
+
+        return view('employee/employees', [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
 });
 
 //  DEPARTMENTS

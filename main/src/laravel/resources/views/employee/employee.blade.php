@@ -4,18 +4,23 @@
 
 @section('content')
     <div class="row">
-        <div class="col s9">
+        <div class="col s10">
         <span class="card-title">
             {{ $employee->first_name }} {{ $employee->last_name }}
         </span>
         </div>
-        <div class="col s3 align-right">
+        <div class="col s1 align-right">
             <a href='{{ URL("/employee/{$employee->id}/edit") }}' class="waves-effect waves-dark btn">
                 <i class="material-icons">mode_edit</i>
             </a>
-            <a href='{{ URL("/employee/{$employee->id}/delete") }}' class="waves-effect waves-dark btn">
-                <i class="material-icons">delete</i>
-            </a>
+        </div>
+        <div class="col s1 align-right">
+            <form action="/employee/{{ $employee->id }}/delete" method="post">
+                <button class="waves-effect waves-dark btn" type="submit">
+                    <i class="material-icons">delete</i>
+                </button>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </form>
         </div>
     </div>
     <hr/>

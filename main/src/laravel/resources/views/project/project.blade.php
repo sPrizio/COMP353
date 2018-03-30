@@ -13,9 +13,14 @@
             <a href='{{ URL("/project/{$project->id}/edit") }}' class="waves-effect waves-dark btn">
                 <i class="material-icons">mode_edit</i>
             </a>
-            <a href='{{ URL("/project/{$project->id}/delete") }}' class="waves-effect waves-dark btn">
-                <i class="material-icons">delete</i>
-            </a>
+        </div>
+        <div class="col s1 align-right">
+            <form action="/project/{{ $project->id }}/delete" method="post">
+                <button class="waves-effect waves-dark btn" type="submit">
+                    <i class="material-icons">delete</i>
+                </button>
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </form>
         </div>
     </div>
     <hr/>

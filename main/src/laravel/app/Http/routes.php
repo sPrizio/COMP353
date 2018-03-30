@@ -26,6 +26,7 @@ define("LOCATION_SELECT", 'SELECT * FROM location');
 define("EMPLOYEE_SELECT", 'SELECT * FROM employee WHERE id = :id');
 
 define("EMPLOYEE_NOT_FOUND", 'No Employee was found with that ID.');
+define("EMPLOYEES_TEMPLATE", 'employee/employees');
 
 //  home page
 Route::get('/', function () {
@@ -36,10 +37,10 @@ Route::get('/', function () {
 
 //  view all employees
 Route::get('/employees', function () {
-    $employees = DB::select('SELECT * FROM employee ORDER BY id');
+    $employees = DB::select(EMPLOYEE_SELECT);
     $departments = DB::select(DEPARTMENT_SELECT);
 
-    return view('employee/employees', [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
+    return view(EMPLOYEES_TEMPLATE, [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
 });
 
 //  view an employee by id
@@ -229,7 +230,7 @@ Route::post('employee/{id}/edit', function ($id) {
 
         $employees = DB::select('SELECT * FROM employee ORDER BY id');
 
-        return view('employee/employees', [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
+        return view(EMPLOYEES_TEMPLATE, [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
     }
 
     return EMPLOYEE_NOT_FOUND;
@@ -245,7 +246,7 @@ Route::post('/employee/{id}/delete', function ($id) {
         $employees = DB::select('SELECT * FROM employee ORDER BY id');
         $departments = DB::select(DEPARTMENT_SELECT);
 
-        return view('employee/employees', [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
+        return view(EMPLOYEES_TEMPLATE, [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
     }
 
     return EMPLOYEE_NOT_FOUND;

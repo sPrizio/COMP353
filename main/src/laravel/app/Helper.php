@@ -106,11 +106,17 @@ class Helper {
         return 'None';
     }
 
+    /**
+     * Checks if an employee's sin already exists in the DB
+     *
+     * @param int $sin social insurance number
+     * @return bool true if duplicate SIN is detected, false otherwise
+     */
     public static function duplicateSINChecker(int $sin) {
-        $sins = DB::select('SELECT sin FROM employee');
+        $sins = DB::select('SELECT sin FROM employee WHERE sin <> :s', ['s' => $sin]);
 
         foreach ($sins as $s) {
-            if ($s == $sin) {
+            if (intval($s->sin) == $sin) {
                 return true;
             }
         }

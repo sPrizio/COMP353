@@ -4,12 +4,12 @@
 
 @section('content')
     <div class="row">
-        <div class="col s9">
+        <div class="col s10">
         <span class="card-title">
             {{ $project->name }}
         </span>
         </div>
-        <div class="col s3 align-right">
+        <div class="col s1 align-right">
             <a href='{{ URL("/project/{$project->id}/edit") }}' class="waves-effect waves-dark btn">
                 <i class="material-icons">mode_edit</i>
             </a>

@@ -118,7 +118,7 @@
         </span>
         </div>
         <div class="col s6 align-right">
-            <a href="/dependent/create" class="waves-effect waves-dark btn">
+            <a href='{{ URL("/employee/{$employee->id}/dependent/create") }}' class="waves-effect waves-dark btn">
                 Add Dependent
             </a>
         </div>
@@ -151,9 +151,12 @@
                         </a>
                     </td>
                     <td>
-                        <a href='{{ URL("/dependent/{$dependent->id}/delete") }}'>
-                            <i class="material-icons">delete</i>
-                        </a>
+                        <form action="/dependent/{{ $dependent->id }}/delete" method="post">
+                            <button class="waves-effect waves-dark btn" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
                     </td>
                 </tr>
             @endforeach

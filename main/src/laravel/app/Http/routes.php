@@ -20,17 +20,35 @@ define("EMPLOYEES", 'employees');
 define("EMPLOYEE", 'employee');
 define("LOCATIONS", 'locations');
 define("PROJECTS", 'projects');
+define("FIRST_NAME", 'first_name');
+define("LAST_NAME", 'last_name');
+define("GENDER", 'gender');
+define("DEPENDENTS", 'dependents');
+define("PROJECT", 'project');
+define("SUPERVISOR", 'supervisor');
+define("FEMALE", "female");
+define("MALE", "male");
 
+//  define SQL
 define("SINGLE_DEPARTMENT_SELECT", 'SELECT * FROM department WHERE id = :id');
 define("DEPARTMENT_SELECT", 'SELECT * FROM department ORDER BY id');
 define("LOCATION_SELECT", 'SELECT * FROM location');
 define("EMPLOYEE_SELECT", 'SELECT * FROM employee WHERE id = :id');
 define("EMPLOYEES_SELECT", 'SELECT * FROM employee ORDER BY id');
+define("EMPLOYEE_DEPENDENTS", 'SELECT * FROM dependent WHERE employee_id = :id ORDER BY last_name');
+define("EMPLOYEE_PROJECT", 'SELECT * FROM project, works_on WHERE id = works_on.project_id AND works_on.employee_id = :id');
+define("EMPLOYEE_SUPERVISOR", 'SELECT * FROM role, employee WHERE employee.id = supervisor_id AND employee_id = :id');
 
+//  define templates
 define("EMPLOYEE_NOT_FOUND", 'No Employee was found with that ID.');
 define("EMPLOYEES_TEMPLATE", 'employee/employees');
+define("EMPLOYEE_TEMPLATE", 'employee/employee');
 define("DEPARTMENT_NOT_FOUND", 'No Department was found with that ID.');
 define("DEPARTMENTS_TEMPLATE", 'department/departments');
+define("BAD_SIN", 'A Social Insurance Number must be exactly 9 digits.');
+define("DUPLICATE_SIN", 'Duplicate SIN detected!');
+define("BAD_DOB", 'That was not a date of birth');
+define("DOB_REGEX", "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/");
 
 //  home page
 Route::get('/', function () {
@@ -53,12 +71,12 @@ Route::get('/employee/view/{id}', function ($id) {
 
     if (count($employee)) {
         //  get employee's dependents
-        $dependents = DB::select('SELECT * FROM dependent WHERE employee_id = :id ORDER BY last_name', ['id' => $id]);
+        $dependents = DB::select(EMPLOYEE_DEPENDENTS, ['id' => $id]);
         $departments = DB::select(DEPARTMENT_SELECT);
 
         //  get project employee is currently working on
-        $project = DB::select('SELECT * FROM project, works_on WHERE id = works_on.project_id AND works_on.employee_id = :id', ['id' => $id]);
-        $supervisor = DB::select('SELECT * FROM role, employee WHERE employee.id = supervisor_id AND employee_id = :id', ['id' => $id]);
+        $project = DB::select(EMPLOYEE_PROJECT, ['id' => $id]);
+        $supervisor = DB::select(EMPLOYEE_SUPERVISOR, ['id' => $id]);
 
         //  checks if the employee is assigned to a project
         if (!count($project)) {
@@ -70,7 +88,7 @@ Route::get('/employee/view/{id}', function ($id) {
             $supervisor[0] = null;
         }
 
-        return view('employee/employee', [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, 'dependents' => $dependents, 'project' => $project[0], 'supervisor' => $supervisor[0]]);
+        return view(EMPLOYEE_TEMPLATE, [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, DEPENDENTS => $dependents, PROJECT => $project[0], SUPERVISOR => $supervisor[0]]);
     }
 
     return EMPLOYEE_NOT_FOUND;
@@ -88,24 +106,24 @@ Route::post('/employee/create', function() {
     $error = false;
     $msg = "";
 
-    $first_name = Input::get('first_name');
-    $last_name = Input::get('last_name');
+    $first_name = Input::get(FIRST_NAME);
+    $last_name = Input::get(LAST_NAME);
     $sin = Input::get('sin');
     $dob = Input::get('dob');
     $address = Input::get('address');
     $phone = Input::get('phone');
     $salary = Input::get('salary');
-    $gender = Input::get('gender');
+    $gender = Input::get(GENDER);
     $department = Input::get(DEPARTMENT);
 
     if ($sin > 999999999 || $sin < 100000000) {
-        $msg = 'A Social Insurance Number must be exactly 9 digits.';
+        $msg = BAD_SIN;
 
         $error = true;
     }
 
     if (Helper::duplicateSINChecker(intval($sin))) {
-        $msg = 'Duplicate SIN detected!';
+        $msg = DUPLICATE_SIN;
 
         $error = true;
     }
@@ -116,8 +134,8 @@ Route::post('/employee/create', function() {
         $error = true;
     }
 
-    if (!preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $dob)) {
-        $msg = 'That was not a date of birth';
+    if (!preg_match(DOB_REGEX, $dob)) {
+        $msg = BAD_DOB;
 
         $error = true;
     }
@@ -138,9 +156,9 @@ Route::post('/employee/create', function() {
     $g = null;
     $dept = Helper::getDepartmentId($department, $departments);
 
-    if ($gender == "male") {
+    if ($gender == MALE) {
         $g = "M";
-    } else if ($gender == "female") {
+    } else if ($gender == FEMALE) {
         $g = "F";
     } else {
         $g = "O";
@@ -173,24 +191,24 @@ Route::post('employee/{id}/edit', function ($id) {
         $error = false;
         $msg = "";
 
-        $first_name = Input::get('first_name');
-        $last_name = Input::get('last_name');
+        $first_name = Input::get(FIRST_NAME);
+        $last_name = Input::get(LAST_NAME);
         $sin = Input::get('sin');
         $dob = Input::get('dob');
         $address = Input::get('address');
         $phone = Input::get('phone');
         $salary = Input::get('salary');
-        $gender = Input::get('gender');
+        $gender = Input::get(GENDER);
         $department = Input::get(DEPARTMENT);
 
         if ($sin > 999999999 || $sin < 100000000) {
-            $msg = 'A Social Insurance Number must be exactly 9 digits.';
+            $msg = BAD_SIN;
 
             $error = true;
         }
 
         if (Helper::duplicateSINChecker(intval($sin))) {
-            $msg = 'Duplicate SIN detected!';
+            $msg = DUPLICATE_SIN;
 
             $error = true;
         }
@@ -201,8 +219,8 @@ Route::post('employee/{id}/edit', function ($id) {
             $error = true;
         }
 
-        if (!preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $dob)) {
-            $msg = 'That was not a date of birth';
+        if (!preg_match(DOB_REGEX, $dob)) {
+            $msg = BAD_DOB;
 
             $error = true;
         }
@@ -223,9 +241,9 @@ Route::post('employee/{id}/edit', function ($id) {
         $g = null;
         $dept = Helper::getDepartmentId($department, $departments);
 
-        if ($gender == "male") {
+        if ($gender == MALE) {
             $g = "M";
-        } else if ($gender == "female") {
+        } else if ($gender == FEMALE) {
             $g = "F";
         } else {
             $g = "O";
@@ -350,6 +368,198 @@ Route::post('/department/{id}/delete', function ($id) {
     return DEPARTMENT_NOT_FOUND;
 });
 
+//  DEPENDENTS
+
+//  add dependent page
+Route::get('/employee/{id}/dependent/create', function ($id) {
+    $employee = DB::select(EMPLOYEE_SELECT, ['id' => $id]);
+
+    if (count($employee)) {
+        return view('dependent/create', [EMPLOYEE => $employee[0]]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
+//  add dependent via HTTP POST
+Route::post('/employee/{id}/dependent/create', function ($id) {
+    $employee = DB::select(EMPLOYEE_SELECT, ['id' => $id]);
+
+    if (count($employee)) {
+        $error = false;
+        $msg = "";
+
+        $first_name = Input::get(FIRST_NAME);
+        $last_name = Input::get(LAST_NAME);
+        $sin = Input::get('sin');
+        $dob = Input::get('dob');
+        $gender = Input::get(GENDER);
+
+        if ($sin > 999999999 || $sin < 100000000) {
+            $msg = BAD_SIN;
+
+            $error = true;
+        }
+
+        if (Helper::duplicateSINChecker(intval($sin))) {
+            $msg = DUPLICATE_SIN;
+
+            $error = true;
+        }
+
+        if (!preg_match(DOB_REGEX, $dob)) {
+            $msg = BAD_DOB;
+
+            $error = true;
+        }
+
+        //  display error message for incorrect form submission
+        if ($error) {
+            return $msg;
+        }
+
+        $g = null;
+
+        if ($gender == MALE) {
+            $g = "M";
+        } else if ($gender == FEMALE) {
+            $g = "F";
+        } else {
+            $g = "O";
+        }
+
+        DB::insert('INSERT INTO dependent(first_name, last_name, sin, date_of_birth, gender, employee_id) VALUES (?, ?, ?, ?, ?, ?)', [$first_name, $last_name, $sin, $dob, $g, $employee[0]->id]);
+
+        //  get employee's dependents
+        $dependents = DB::select(EMPLOYEE_DEPENDENTS, ['id' => $id]);
+        $departments = DB::select(DEPARTMENT_SELECT);
+
+        //  get project employee is currently working on
+        $project = DB::select(EMPLOYEE_PROJECT, ['id' => $id]);
+        $supervisor = DB::select(EMPLOYEE_SUPERVISOR, ['id' => $id]);
+
+        //  checks if the employee is assigned to a project
+        if (!count($project)) {
+            $project = null;
+        }
+
+        //  checks if the employee has a supervisor
+        if (!count($supervisor)) {
+            $supervisor[0] = null;
+        }
+
+        return view(EMPLOYEE_TEMPLATE, [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, DEPENDENTS => $dependents, PROJECT => $project[0], SUPERVISOR => $supervisor[0]]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
+//  edit dependent page
+Route::get('/dependent/{id}/edit', function ($id) {
+    $dependent = DB::select('SELECT * FROM dependent WHERE id = :id', ['id' => $id]);
+
+    if (count($dependent)) {
+        return view('dependent/edit', ['dependent' => $dependent[0]]);
+    }
+
+    return 'No Dependent was found with that ID.';
+});
+
+//  update dependent via HTTP POST
+Route::post('/dependent/{id}/edit', function ($id) {
+    $dependent = DB::select('SELECT * FROM dependent WHERE id = :id', ['id' => $id]);
+
+    if (count($dependent)) {
+        $error = false;
+        $msg = "";
+
+        $first_name = Input::get(FIRST_NAME);
+        $last_name = Input::get(LAST_NAME);
+        $sin = Input::get('sin');
+        $dob = Input::get('dob');
+        $gender = Input::get(GENDER);
+
+        if ($sin > 999999999 || $sin < 100000000) {
+            $msg = BAD_SIN;
+
+            $error = true;
+        }
+
+        if (Helper::duplicateSINChecker(intval($sin))) {
+            $msg = DUPLICATE_SIN;
+
+            $error = true;
+        }
+
+        if (!preg_match(DOB_REGEX, $dob)) {
+            $msg = BAD_DOB;
+
+            $error = true;
+        }
+
+        //  display error message for incorrect form submission
+        if ($error) {
+            return $msg;
+        }
+
+        $g = null;
+
+        if ($gender == MALE) {
+            $g = "M";
+        } else if ($gender == FEMALE) {
+            $g = "F";
+        } else {
+            $g = "O";
+        }
+        
+        DB::update('UPDATE dependent SET first_name = ?, last_name = ?, sin = ?, date_of_birth = ?, gender = ? WHERE id = ?', [$first_name, $last_name, $sin, $dob, $g, $dependent[0]->id]);
+
+        //  get dependent's employee
+        $employee = DB::select(EMPLOYEE_SELECT, ['id' => $dependent[0]->employee_id]);
+
+        //  get employee's dependents
+        $departments = DB::select(DEPARTMENT_SELECT);
+
+        //  get project employee is currently working on
+        $project = DB::select(EMPLOYEE_PROJECT, ['id' => $id]);
+        $supervisor = DB::select(EMPLOYEE_SUPERVISOR, ['id' => $id]);
+
+        //  checks if the employee is assigned to a project
+        if (!count($project)) {
+            $project = null;
+        }
+
+        //  checks if the employee has a supervisor
+        if (!count($supervisor)) {
+            $supervisor[0] = null;
+        }
+
+        //  minor bug here causing the page refresh to not show dependents, which forces us to
+        //  have to refresh the page by navigating to /employee/view/id
+        $dependents = DB::select(EMPLOYEE_DEPENDENTS, ['id' => $id]);
+
+        return view(EMPLOYEE_TEMPLATE, [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, DEPENDENTS => $dependents, PROJECT => $project[0], SUPERVISOR => $supervisor[0]]);
+    }
+
+    return 'No Dependent was found with that ID.';
+});
+
+//  delete dependent
+Route::post('/dependent/{id}/delete', function ($id) {
+    $dependent = DB::select('SELECT * FROM dependent WHERE id = :id', ['id' => $id]);
+
+    if (count($dependent)) {
+        $employees = DB::select(EMPLOYEES_SELECT);
+        $departments = DB::select(DEPARTMENT_SELECT);
+
+        DB::delete('DELETE FROM dependent WHERE id = :id', ['id' => $id]);
+
+        return view(EMPLOYEES_TEMPLATE, [EMPLOYEES => $employees, DEPARTMENTS => $departments]);
+    }
+
+    return 'No Dependent was found with that ID.';
+});
+
 //  PROJECTS
 
 //  view all projects
@@ -370,7 +580,7 @@ Route::get('/project/view/{id}', function ($id) {
         $department = DB::select('SELECT * FROM responsible_for, department WHERE department_id = id AND project_id = :id;', ['id' => $id]);
         $employees = DB::select('SELECT * FROM works_on, employee WHERE id = employee_id AND project_id = :id ORDER BY id', ['id' => $id]);
 
-        return view('project/project', ['project' => $project[0], DEPARTMENT => $department[0], LOCATIONS => $locations, DEPARTMENTS => $departments, EMPLOYEES => $employees]);
+        return view('project/project', [PROJECT => $project[0], DEPARTMENT => $department[0], LOCATIONS => $locations, DEPARTMENTS => $departments, EMPLOYEES => $employees]);
     }
 
     return 'No Project was found with that ID.';

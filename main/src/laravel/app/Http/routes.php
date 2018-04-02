@@ -685,5 +685,66 @@ Route::get('/location/view/{id}', function ($id) {
         return view('location/location', [LOCATION => $location[0], DEPARTMENTS => $departments, PROJECTS => $projects, LOCATIONS => $locations]);
     }
 
-    return ('No Location was found with that ID.');
+    return 'No Location was found with that ID.';
+});
+
+//  create location page
+Route::get('/location/create', function () {
+    return view('location/create');
+});
+
+//  create location via HTTP POST
+Route::post('/location/create', function () {
+    $name = Input::get('name');
+    $address = Input::get('address');
+
+    DB::insert('INSERT INTO location(name, address) VALUES (?, ?)', [$name, $address]);
+
+    $locations = DB::select('SELECT * FROM location ORDER BY id');
+
+    return view('location/locations', [LOCATIONS => $locations]);
+});
+
+//  edit location page
+Route::get('/location/{id}/edit', function ($id) {
+    $location = DB::select('SELECT * FROM location WHERE id = :id', ['id' => $id]);
+
+    if (count($location)) {
+        return view('location/edit', [LOCATION => $location[0]]);
+    }
+
+    return 'No Location was found with that ID.';
+});
+
+//  edit location via HTTP POST
+Route::post('/location/{id}/edit', function ($id) {
+    $location = DB::select('SELECT * FROM location WHERE id = :id', ['id' => $id]);
+
+    if (count($location)) {
+        $name = Input::get('name');
+        $address = Input::get('address');
+
+        DB::update('UPDATE location SET name = ?, address = ? WHERE id = ?', [$name, $address, $location[0]->id]);
+
+        $locations = DB::select('SELECT * FROM location ORDER BY id');
+
+        return view('location/locations', [LOCATIONS => $locations]);
+    }
+
+    return 'No Location was found with that ID.';
+});
+
+//  delete location via HTTP POST
+Route::post('/location/{id}/delete', function ($id) {
+    $location = DB::select('SELECT * FROM location WHERE id = :id', ['id' => $id]);
+
+    if (count($location)) {
+        DB::delete('DELETE FROM location WHERE id = :id', ['id' => $id]);
+
+        $locations = DB::select('SELECT * FROM location ORDER BY id');
+
+        return view('location/locations', [LOCATIONS => $locations]);
+    }
+
+    return 'No Location was found with that ID.';
 });

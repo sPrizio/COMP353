@@ -19,6 +19,7 @@ define("DEPARTMENT", 'department');
 define("EMPLOYEES", 'employees');
 define("EMPLOYEE", 'employee');
 define("LOCATIONS", 'locations');
+define("LOCATION", 'location');
 define("PROJECTS", 'projects');
 define("FIRST_NAME", 'first_name');
 define("LAST_NAME", 'last_name');
@@ -95,14 +96,14 @@ Route::get('/employee/view/{id}', function ($id) {
 });
 
 //  create employee page
-Route::get('/employee/create', function() {
+Route::get('/employee/create', function () {
     $departments = DB::select(DEPARTMENT_SELECT);
 
     return view('employee/create', [DEPARTMENTS => $departments]);
 });
 
 //  create the employee via HTTP POST
-Route::post('/employee/create', function() {
+Route::post('/employee/create', function () {
     $error = false;
     $msg = "";
 
@@ -334,7 +335,7 @@ Route::get('department/{id}/edit', function ($id) {
 });
 
 //  updates department via HTTP POST
-Route::post('department/{id}/edit', function($id) {
+Route::post('department/{id}/edit', function ($id) {
     $department = DB::select(SINGLE_DEPARTMENT_SELECT, ['id' => $id]);
 
     if (count($department)) {
@@ -511,7 +512,7 @@ Route::post('/dependent/{id}/edit', function ($id) {
         } else {
             $g = "O";
         }
-        
+
         DB::update('UPDATE dependent SET first_name = ?, last_name = ?, sin = ?, date_of_birth = ?, gender = ? WHERE id = ?', [$first_name, $last_name, $sin, $dob, $g, $dependent[0]->id]);
 
         //  get dependent's employee
@@ -586,6 +587,83 @@ Route::get('/project/view/{id}', function ($id) {
     return 'No Project was found with that ID.';
 });
 
+//  create project page
+Route::get('/project/create', function () {
+    $locations = DB::select('SELECT * FROM location ORDER BY name');
+    $departments = DB::select('SELECT * FROM department ORDER BY name');
+
+    return view('project/create', [LOCATIONS => $locations, DEPARTMENTS => $departments]);
+});
+
+//  create project via HTTP POST
+Route::post('/project/create', function () {
+    $name = Input::get('name');
+    $location = Input::get(LOCATION);
+    $dept = Input::get(DEPARTMENT);
+
+    DB::insert('INSERT INTO project(name, location_id) VALUES (?, ?)', [$name, $location]);
+    $p_id = DB::select('SELECT * FROM project WHERE name = :n AND location_id = :id', ['n' => $name, 'id' => $location]);
+
+    DB::insert('INSERT INTO responsible_for(department_id, project_id) VALUES (?, ?)', [$dept, $p_id[0]->id]);
+
+    $projects = DB::select('SELECT * FROM project ORDER BY id');
+    $locations = DB::select(LOCATION_SELECT);
+
+    return view('project/projects', [PROJECTS => $projects, LOCATIONS => $locations]);
+});
+
+//  edit project page
+Route::get('/project/{id}/edit', function ($id) {
+    $project = DB::select('SELECT * FROM project WHERE id = :id', ['id' => $id]);
+
+    if (count($project)) {
+        $locations = DB::select('SELECT * FROM location ORDER BY name');
+        $departments = DB::select('SELECT * FROM department ORDER BY name');
+
+        return view('project/edit', [PROJECT => $project[0], LOCATIONS => $locations, DEPARTMENTS => $departments]);
+    }
+
+    return 'No Project was found with that ID.';
+});
+
+//  edit project via HTTP POST
+Route::post('/project/{id}/edit', function ($id) {
+    $project = DB::select('SELECT * FROM project WHERE id = :id', ['id' => $id]);
+
+    if (count($project)) {
+        $name = Input::get('name');
+        $location = Input::get(LOCATION);
+        $dept = Input::get(DEPARTMENT);
+
+        DB::update('UPDATE project SET name = ?, location_id = ? WHERE id = ?', [$name, $location, $project[0]->id]);
+        DB::update('UPDATE responsible_for SET department_id = ? WHERE project_id = ?', [$dept, $project[0]->id]);
+
+        $projects = DB::select('SELECT * FROM project ORDER BY id');
+        $locations = DB::select(LOCATION_SELECT);
+
+        return view('project/projects', [PROJECTS => $projects, LOCATIONS => $locations]);
+    }
+
+    return 'No Project was found with that ID.';
+});
+
+//  delete project via HTTP POST
+Route::post('/project/{id}/delete', function ($id) {
+    $project = DB::select('SELECT * FROM project WHERE id = :id', ['id' => $id]);
+
+    if (count($project)) {
+        DB::delete('DELETE FROM project WHERE id = :id', ['id' => $project[0]->id]);
+        DB::delete('DELETE FROM responsible_for WHERE project_id = :id', ['id' => $project[0]->id]);
+
+        $projects = DB::select('SELECT * FROM project ORDER BY id');
+        $locations = DB::select(LOCATION_SELECT);
+
+        return view('project/projects', [PROJECTS => $projects, LOCATIONS => $locations]);
+    }
+
+    return 'No Project was found with that ID.';
+});
+
 //  LOCATIONS
 
 //  view all locations
@@ -604,7 +682,7 @@ Route::get('/location/view/{id}', function ($id) {
         $projects = DB::select('SELECT * FROM project WHERE id IN (SELECT project_id FROM responsible_for WHERE department_id IN (SELECT department_id FROM located_in WHERE location_id = :id)) AND location_id = :id2', ['id' => $id, 'id2' => $id]);
         $locations = DB::select('SELECT * FROM location');
 
-        return view('location/location', ['location' => $location[0], DEPARTMENTS => $departments, PROJECTS => $projects, LOCATIONS => $locations]);
+        return view('location/location', [LOCATION => $location[0], DEPARTMENTS => $departments, PROJECTS => $projects, LOCATIONS => $locations]);
     }
 
     return ('No Location was found with that ID.');

@@ -74,6 +74,7 @@
                 <div class="links">
                     <a href="/departments">Departments</a>
                     <a href="/employees">Employees</a>
+                    <a href="/supervisors">Supervisors</a>
                     <a href="/projects">Projects</a>
                     <a href="/locations">Locations</a>
                 </div>

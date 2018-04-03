@@ -25,6 +25,7 @@
         <ul class="right hide-on-med-and-down">
             <li><a href="/departments">Departments</a></li>
             <li><a href="/employees">Employees</a></li>
+            <li><a href="/supervisors">Supervisors</a></li>
             <li><a href="/projects">Projects</a></li>
             <li><a href="/locations">Locations</a></li>
         </ul>
@@ -34,6 +35,7 @@
 <ul class="sidenav" id="mobile-demo">
     <li><a href="/departments">Departments</a></li>
     <li><a href="/employees">Employees</a></li>
+    <li><a href="/supervisors">Supervisors</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/locations">Locations</a></li>
 </ul>

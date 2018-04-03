@@ -45,6 +45,9 @@ define("DEPENDENT_SELECT", 'SELECT * FROM dependent WHERE id = :id');
 define("PROJECTS_SELECT", 'SELECT * FROM project ORDER BY id');
 define("PROJECT_SELECT", 'SELECT * FROM project WHERE id = :id');
 define("LOCATION_SELECT", 'SELECT * FROM location WHERE id = :id');
+define("SUPERVISORS_SELECT", 'SELECT * FROM employee WHERE id IN (SELECT supervisor_id FROM role)');
+define("SUPERVISOR_SELECT", 'SELECT * FROM employee WHERE id = (SELECT DISTINCT supervisor_id FROM role WHERE supervisor_id = :id)');
+define("SUPERVISOR_INSERTION", 'INSERT INTO role(employee_id, supervisor_id) VALUES (?, ?)');
 
 //  define template/message constants
 define("EMPLOYEE_NOT_FOUND", 'No Employee was found with that ID.');
@@ -61,6 +64,8 @@ define("PROJECT_NOT_FOUND", 'No Project was found with that ID.');
 define("PROJECTS_TEMPLATE", 'project/projects');
 define("LOCATIONS_TEMPLATE", 'location/locations');
 define("LOCATION_NOT_FOUND", 'No Location was found with that ID.');
+define("SUPERVISORS_TEMPLATE", 'supervisor/supervisors');
+define("SUPERVISOR_NOT_FOUND", 'No Supervisor was found with that ID.');
 
 //  home page
 Route::get('/', function () {
@@ -291,15 +296,15 @@ Route::post('/employee/{id}/delete', function ($id) {
 
 //  view all supervisors
 Route::get('/supervisors', function () {
-    $supervisors = DB::select('SELECT * FROM employee WHERE id IN (SELECT supervisor_id FROM role)');
+    $supervisors = DB::select(SUPERVISORS_SELECT);
     $departments = DB::select(DEPARTMENT_SELECT);
 
-    return view('supervisor/supervisors', [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
+    return view(SUPERVISORS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
 });
 
 //  view a supervisor
 Route::get('/supervisor/view/{id}', function ($id) {
-    $supervisor = DB::select('SELECT * FROM employee WHERE id = (SELECT DISTINCT supervisor_id FROM role WHERE supervisor_id = :id)', ['id' => $id]);
+    $supervisor = DB::select(SUPERVISOR_SELECT, ['id' => $id]);
     $subs = DB::select('SELECT * FROM employee WHERE id IN (SELECT employee_id FROM role WHERE supervisor_id = :id)', ['id' => $id]);
     $departments = DB::select(DEPARTMENT_SELECT);
 
@@ -307,7 +312,7 @@ Route::get('/supervisor/view/{id}', function ($id) {
         return view('supervisor/supervisor', ['supervisor' => $supervisor[0], 'subordinates' => $subs, DEPARTMENTS => $departments]);
     }
 
-    return 'No Supervisor was found with that ID.';
+    return SUPERVISOR_NOT_FOUND;
 });
 
 //  create supervisor page
@@ -321,17 +326,17 @@ Route::get('/supervisor/create', function () {
 Route::post('/supervisor/create', function () {
     $id = Input::get('id');
 
-    DB::insert('INSERT INTO role(employee_id, supervisor_id) VALUES (?, ?)', [0, $id]);
+    DB::insert(SUPERVISOR_INSERTION, [0, $id]);
 
-    $supervisors = DB::select('SELECT * FROM employee WHERE id IN (SELECT supervisor_id FROM role)');
+    $supervisors = DB::select(SUPERVISORS_SELECT);
     $departments = DB::select(DEPARTMENT_SELECT);
 
-    return view('supervisor/supervisors', [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
+    return view(SUPERVISORS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
 });
 
 //  add subordinate page
 Route::get('/supervisor/{id}/employee/create', function ($id) {
-    $supervisor = DB::select('SELECT * FROM employee WHERE id = (SELECT DISTINCT supervisor_id FROM role WHERE supervisor_id = :id)', ['id' => $id]);
+    $supervisor = DB::select(SUPERVISOR_SELECT, ['id' => $id]);
 
     if (count($supervisor)) {
         $employees = DB::select('SELECT * FROM employee WHERE id NOT IN (SELECT employee_id FROM role) AND id <> :id', ['id' => $id]);
@@ -339,59 +344,59 @@ Route::get('/supervisor/{id}/employee/create', function ($id) {
         return view('supervisor/add_employee', [EMPLOYEES => $employees, 'id' => $id]);
     }
 
-    return 'No Supervisor was found with that ID.';
+    return SUPERVISOR_NOT_FOUND;
 });
 
 //  add subordinate via HTTP POST
 Route::post('/supervisor/{id}/employee/create', function ($id) {
-    $supervisor = DB::select('SELECT * FROM employee WHERE id = (SELECT DISTINCT supervisor_id FROM role WHERE supervisor_id = :id)', ['id' => $id]);
+    $supervisor = DB::select(SUPERVISOR_SELECT, ['id' => $id]);
 
     if (count($supervisor)) {
         $e_id = Input::get('id');
 
         DB::delete('DELETE FROM role WHERE supervisor_id = ? AND employee_id = 0', [$id]);
-        DB::insert('INSERT INTO role(employee_id, supervisor_id) VALUES (?, ?)', [$e_id, $id]);
+        DB::insert(SUPERVISOR_INSERTION, [$e_id, $id]);
 
-        $supervisors = DB::select('SELECT * FROM employee WHERE id IN (SELECT supervisor_id FROM role)');
+        $supervisors = DB::select(SUPERVISORS_SELECT);
         $departments = DB::select(DEPARTMENT_SELECT);
 
-        return view('supervisor/supervisors', [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
+        return view(SUPERVISORS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
     }
 
-    return 'No Supervisor was found with that ID.';
+    return SUPERVISOR_NOT_FOUND;
 });
 
 //  deletes a subordinate
 Route::post('/supervisor/{sid}/employee/{id}/delete', function ($sid, $id) {
     DB::delete('DELETE FROM role WHERE employee_id = ? AND supervisor_id = ?', [$id, $sid]);
 
-    $supervisors = DB::select('SELECT * FROM employee WHERE id IN (SELECT supervisor_id FROM role)');
+    $supervisors = DB::select(SUPERVISORS_SELECT);
     $departments = DB::select(DEPARTMENT_SELECT);
 
     $sup = DB::select('SELECT * FROM role WHERE supervisor_id = :id', ['id' => $sid]);
 
     if (!count($sup)) {
-        DB::insert('INSERT INTO role(employee_id, supervisor_id) VALUES (?, ?)', [0, $sid]);
+        DB::insert(SUPERVISOR_INSERTION, [0, $sid]);
     }
 
-    return view('supervisor/supervisors', [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
+    return view(SUPERVISORS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
 
 });
 
 //  deletes a supervisor
 Route::post('/supervisor/{id}/delete', function ($id) {
-    $supervisor = DB::select('SELECT * FROM employee WHERE id = (SELECT DISTINCT supervisor_id FROM role WHERE supervisor_id = :id)', ['id' => $id]);
+    $supervisor = DB::select(SUPERVISOR_SELECT, ['id' => $id]);
 
     if (count($supervisor)) {
         DB::delete('DELETE FROM role WHERE supervisor_id = :id', ['id' => $supervisor[0]->id]);
 
-        $supervisors = DB::select('SELECT * FROM employee WHERE id IN (SELECT supervisor_id FROM role)');
+        $supervisors = DB::select(SUPERVISORS_SELECT);
         $departments = DB::select(DEPARTMENT_SELECT);
 
-        return view('supervisor/supervisors', [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
+        return view(SUPERVISORS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $supervisors]);
     }
 
-    return 'No Supervisor was found with that ID.';
+    return SUPERVISOR_NOT_FOUND;
 });
 
 //  DEPARTMENTS

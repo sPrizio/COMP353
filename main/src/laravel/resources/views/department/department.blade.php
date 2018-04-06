@@ -70,9 +70,14 @@
     <br/>
     <div class="row">
         <div class="col s6">
-        <span class="card-title">
-            Projects
-        </span>
+            <span class="card-title">
+                Projects
+            </span>
+        </div>
+        <div class="col s6 align-right">
+            <a href='{{ URL("/department/{$department->id}/project/create") }}' class="waves-effect waves-dark btn">
+                Add Project
+            </a>
         </div>
     </div>
     <hr/>
@@ -84,6 +89,7 @@
                 <th>ID</th>
                 <th class="align-left">Name</th>
                 <th class="align-left">Location</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -95,6 +101,14 @@
                     </td>
                     <td class="align-left">
                         {{ Helper::getLocationName($project->location_id, $locations) }}
+                    </td>
+                    <td>
+                        <form action="/department/{{ $department->id }}/project/{{ $project->id }}/delete" method="post">
+                            <button class="waves-effect waves-dark btn" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
                     </td>
                 </tr>
             @endforeach

@@ -39,7 +39,12 @@
                     Project Name: {{ $project->name }}
                 </p>
                 <p class="attribute">
-                    Department: <a href='{{ URL("/department/view/{$department->id}") }}'>{{ $department->name }}</a>
+                    @if (is_null($department))
+                        Department: None
+                    @else
+                        Department: <a
+                                href='{{ URL("/department/view/{$department->id}") }}'>{{ $department->name }}</a>
+                    @endif
                 </p>
                 <p class="attribute">
                     Location: <a

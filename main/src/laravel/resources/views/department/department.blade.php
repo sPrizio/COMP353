@@ -46,13 +46,19 @@
         </div>
         <div class="col l6 m12 s12">
             <span class="attribute-category">
-                Locations
+                Locations <a href="/department/{{ $department->id }}/add_department_location" class="btn waves-effect waves-dark"><i class="material-icons">plus_one</i></a>
             </span>
             <div class="attribute-container">
                 @forelse($locations as $location)
-                    <p class="attribute">
-                        <a href='{{ URL("/location/view/{$location->id}") }}'>{{ $location->name }}</a>
-                    </p>
+                    <form action="/department/{{ $department->id }}/location/{{ $location->id }}/delete" method="post">
+                        <span class="attribute">
+                            <a href='{{ URL("/location/view/{$location->id}") }}'>{{ $location->name }}</a>
+                        </span>
+                        <button class="waves-effect waves-dark btn" type="submit">
+                            <i class="material-icons">delete</i>
+                        </button>
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    </form>
                 @empty
                     <p class="attribute">
                         This department does not have any locations.

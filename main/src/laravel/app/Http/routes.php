@@ -404,7 +404,7 @@ Route::post('/supervisor/{id}/delete', function ($id) {
 //  view all departments
 Route::get('/departments', function () {
     $departments = DB::select(DEPARTMENT_SELECT);
-    $employees = DB::select('SELECT * FROM employee');
+    $employees = DB::select(EMPLOYEES_SELECT);
 
     return view(DEPARTMENTS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $employees]);
 });
@@ -412,7 +412,7 @@ Route::get('/departments', function () {
 //  view a department by id
 Route::get('/department/view/{id}', function ($id) {
     $department = DB::select(SINGLE_DEPARTMENT_SELECT, ['id' => $id]);
-    $employee_list = DB::select('SELECT * FROM employee');
+    $employee_list = DB::select(EMPLOYEES_SELECT);
 
     if (count($department)) {
         $locations = DB::select('SELECT * FROM located_in, location WHERE location_id = id AND department_id = :id', ['id' => $id]);
@@ -420,6 +420,47 @@ Route::get('/department/view/{id}', function ($id) {
         $employees = DB::select('SELECT * FROM comp353_main_project.employee WHERE department_id = :id ORDER BY last_name', ['id' => $id]);
 
         return view('department/department', [DEPARTMENT => $department[0], 'employee_list' => $employee_list, LOCATIONS => $locations, PROJECTS => $projects, EMPLOYEES => $employees]);
+    }
+
+    return DEPARTMENT_NOT_FOUND;
+});
+
+//  add department location page
+Route::get('/department/{id}/add_department_location', function ($id) {
+    $locations = DB::select('SELECT * FROM location WHERE id NOT IN (SELECT location_id FROM located_in WHERE department_id = :id);', ['id' => $id]);
+
+    return view('department/add_department_location', [LOCATIONS => $locations, 'id' => $id]);
+});
+
+//  add department location via HTTP POST
+Route::post('/department/{id}/add_department_location', function ($id) {
+    $department = DB::select(SINGLE_DEPARTMENT_SELECT, ['id' => $id]);
+
+    if (count($department)) {
+        $loc_id = Input::get('id');
+
+        DB::insert('INSERT INTO located_in(location_id, department_id) VALUES (?, ?)', [$loc_id, $id]);
+
+        $departments = DB::select(DEPARTMENT_SELECT);
+        $employees = DB::select(EMPLOYEES_SELECT);
+
+        return view(DEPARTMENTS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $employees]);
+    }
+
+    return DEPARTMENT_NOT_FOUND;
+});
+
+//  delete department location via HTTP POST
+Route::post('/department/{dept_id}/location/{loc_id}/delete', function ($dept_id, $loc_id) {
+    $department = DB::select(SINGLE_DEPARTMENT_SELECT, ['id' => $dept_id]);
+
+    if (count($department)) {
+        DB::delete('DELETE FROM located_in WHERE department_id = ? AND location_id = ?', [$dept_id, $loc_id]);
+
+        $departments = DB::select(DEPARTMENT_SELECT);
+        $employees = DB::select(EMPLOYEES_SELECT);
+
+        return view(DEPARTMENTS_TEMPLATE, [DEPARTMENTS => $departments, EMPLOYEES => $employees]);
     }
 
     return DEPARTMENT_NOT_FOUND;
@@ -436,8 +477,9 @@ Route::get('/department/create', function () {
 Route::post('/department/create', function () {
     $name = Input::get('name');
     $manager_id = Input::get('manager');
+    $start = Input::get('start');
 
-    DB::insert('INSERT INTO department(name, manager_id) VALUES (?, ?)', [$name, $manager_id]);
+    DB::insert('INSERT INTO department(name, manager_id, start_date) VALUES (?, ?, ?)', [$name, $manager_id, $start]);
 
     $employees = DB::select('SELECT * FROM employee ORDER BY last_name');
 
@@ -464,8 +506,9 @@ Route::post('department/{id}/edit', function ($id) {
     if (count($department)) {
         $name = Input::get('name');
         $manager = Input::get('manager');
+        $start = Input::get('start');
 
-        DB::update('UPDATE department SET name = ?, manager_id = ? WHERE id = ?', [$name, $manager, $department[0]->id]);
+        DB::update('UPDATE department SET name = ?, manager_id = ?, start_date = ? WHERE id = ?', [$name, $manager, $start, $department[0]->id]);
 
         $employees = DB::select(EMPLOYEES_SELECT);
         $departments = DB::select(DEPARTMENT_SELECT);
@@ -689,7 +732,7 @@ Route::post('/dependent/{id}/delete', function ($id) {
 //  view all projects
 Route::get('/projects', function () {
     $projects = DB::select(PROJECTS_SELECT);
-    $locations = DB::select(LOCATION_SELECT);
+    $locations = DB::select(LOCATIONS_SELECT);
 
     return view(PROJECTS_TEMPLATE, [PROJECTS => $projects, LOCATIONS => $locations]);
 });
@@ -699,7 +742,7 @@ Route::get('/project/view/{id}', function ($id) {
     $project = DB::select(PROJECT_SELECT, ['id' => $id]);
 
     if (count($project)) {
-        $locations = DB::select(LOCATION_SELECT);
+        $locations = DB::select(LOCATIONS_SELECT);
         $departments = DB::select(DEPARTMENT_SELECT);
         $department = DB::select('SELECT * FROM responsible_for, department WHERE department_id = id AND project_id = :id;', ['id' => $id]);
         $employees = DB::select('SELECT * FROM works_on, employee WHERE id = employee_id AND project_id = :id ORDER BY id', ['id' => $id]);

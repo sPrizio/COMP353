@@ -22,6 +22,7 @@
             <th>ID</th>
             <th class="align-left">Name</th>
             <th class="align-left">Manager</th>
+            <th>Manager Start Date</th>
         </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
                 <td class="align-left">
                     <a href='{{ URL("/employee/view/{$department->manager_id}") }}'>{{ Helper::getManagerName($department->manager_id, $employees) }}</a>
                 </td>
+                <td>{{ $department->start_date }}</td>
             </tr>
         @endforeach
         </tbody>

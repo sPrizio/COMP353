@@ -27,6 +27,10 @@
                     </select>
                     <label>Manager</label>
                 </div>
+                <div class="input-field col s6">
+                    <input id="start" name="start" type="text" value="{{ $department->start_date }}" required>
+                    <label for="start">Manager Start Date</label>
+                </div>
             </div>
             <div class="align-right">
                 <button class="btn waves-effect waves-light" type="submit" name="action">

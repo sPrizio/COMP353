@@ -56,9 +56,14 @@
     <br/>
     <div class="row">
         <div class="col s6">
-        <span class="card-title">
-            Employees
-        </span>
+            <span class="card-title">
+                Employees
+            </span>
+        </div>
+        <div class="col s6 align-right">
+            <a href="/project/{{ $project->id }}/employee/create" class="waves-effect waves-dark btn">
+                Add Employee
+            </a>
         </div>
     </div>
     <hr/>
@@ -72,6 +77,8 @@
                 <th class="align-left">Address</th>
                 <th>Salary</th>
                 <th>Hours Worked</th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -84,6 +91,19 @@
                     <td class="align-left">{{ $employee->address }}</td>
                     <td>{{ $employee->salary }}</td>
                     <td>{{ $employee->hours_worked }}</td>
+                    <td>
+                        <a href='{{ URL("/project/{$project->id}/employee/{$employee->id}/edit") }}'>
+                            <i class="material-icons">mode_edit</i>
+                        </a>
+                    </td>
+                    <td>
+                        <form action="/project/{{ $project->id }}/employee/{{ $employee->employee_id }}/delete" method="post">
+                            <button class="waves-effect waves-dark btn" type="submit">
+                                <i class="material-icons">delete</i>
+                            </button>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </form>
+                    </td>
                 </tr>
             @endforeach
             </tbody>

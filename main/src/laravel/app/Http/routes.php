@@ -871,6 +871,77 @@ Route::post('/project/{id}/delete', function ($id) {
     return PROJECT_NOT_FOUND;
 });
 
+//  add employee to project page
+Route::get('/project/{id}/employee/create', function ($id) {
+    $employees = DB::select('SELECT * FROM employee WHERE id NOT IN (SELECT employee_id FROM works_on)');
+
+    return view('project/add_employee', [EMPLOYEES => $employees, 'id' => $id]);
+});
+
+//  add employee to project via HTTP POST
+Route::post('/project/{id}/employee/create', function ($id) {
+    $project = DB::select(PROJECT_SELECT, ['id' => $id]);
+
+    if (count($project)) {
+        $e_id = Input::get('id');
+        $hours = Input::get('hours');
+
+        DB::insert('INSERT INTO works_on(project_id, employee_id, hours_worked) VALUES (?, ?, ?)', [$id, $e_id, $hours]);
+
+        $projects = DB::select(PROJECTS_SELECT);
+        $locations = DB::select(LOCATIONS_SELECT);
+
+        return view(PROJECTS_TEMPLATE, [PROJECTS => $projects, LOCATIONS => $locations]);
+    }
+
+    return PROJECT_NOT_FOUND;
+});
+
+//  edit project employee page
+Route::get('/project/{id}/employee/{eid}/edit', function ($id, $eid) {
+    $employee = DB::select('SELECT * FROM works_on WHERE employee_id = :eid AND project_id = :id', ['eid' => $eid, 'id' => $id]);
+
+    if (count($employee)) {
+        return view('project/edit_employee', [EMPLOYEE => $employee[0], 'id' => $id]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
+//  edit project employee via HTTP POST
+Route::post('/project/{id}/employee/{eid}/edit', function ($id, $eid) {
+    $employee = DB::select('SELECT * FROM works_on WHERE employee_id = :eid AND project_id = :id', ['eid' => $eid, 'id' => $id]);
+
+    if (count($employee)) {
+        $hours = Input::get('hours');
+
+        DB::update('UPDATE works_on SET hours_worked = ? WHERE employee_id = ? AND project_id = ?', [$hours, $eid, $id]);
+
+        $projects = DB::select(PROJECTS_SELECT);
+        $locations = DB::select(LOCATIONS_SELECT);
+
+        return view(PROJECTS_TEMPLATE, [PROJECTS => $projects, LOCATIONS => $locations]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
+//  delete project employee via HTTP POST
+Route::post('/project/{id}/employee/{eid}/delete', function ($id, $eid) {
+    $employee = DB::select('SELECT * FROM works_on WHERE employee_id = :eid AND project_id = :id', ['eid' => $eid, 'id' => $id]);
+
+    if (count($employee)) {
+        DB::delete('DELETE FROM works_on WHERE employee_id = :eid AND project_id = :id;', ['eid' => $eid, 'id' => $id]);
+
+        $projects = DB::select(PROJECTS_SELECT);
+        $locations = DB::select(LOCATIONS_SELECT);
+
+        return view(PROJECTS_TEMPLATE, [PROJECTS => $projects, LOCATIONS => $locations]);
+    }
+
+    return EMPLOYEE_NOT_FOUND;
+});
+
 //  LOCATIONS
 
 //  view all locations

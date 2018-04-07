@@ -50,6 +50,12 @@
                     Location: <a
                             href='{{ URL("/location/view/{$project->location_id}") }}'>{{ Helper::getLocationName($project->location_id, $locations) }}</a>
                 </p>
+                <p class="attribute">
+                    Assigned Employees: {{ $sum_employees }}
+                </p>
+                <p class="attribute">
+                    Total Hours Worked: {{ $sum_hours }}
+                </p>
             </div>
         </div>
     </div>

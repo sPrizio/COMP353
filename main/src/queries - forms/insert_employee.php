@@ -22,8 +22,8 @@
 </html>
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "SOEN341W18";
+$username = "comp353";
+$password = "admin";
 $dbname = "comp353_main_project";
 
 // Create connection

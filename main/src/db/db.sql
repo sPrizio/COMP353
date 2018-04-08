@@ -91,7 +91,7 @@ CREATE TABLE `employee` (
   `date_of_birth` date DEFAULT NULL,
   `address` varchar(512) NOT NULL,
   `phone` char(12) DEFAULT NULL,
-  `salary` int(11) UNSIGNED NOT NULL,
+  `salary` DECIMAL(5,2) UNSIGNED NOT NULL,
   `gender` char(1) NOT NULL,
   `department_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),

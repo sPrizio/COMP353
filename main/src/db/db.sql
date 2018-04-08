@@ -118,7 +118,8 @@ DROP TABLE IF EXISTS `located_in`;
 CREATE TABLE `located_in` (
   `location_id` int(11) NOT NULL,
   `department_id` int(11) NOT NULL,
-  PRIMARY KEY (`location_id`,`department_id`)
+  CONSTRAINT `location_id_FOREIGN` FOREIGN KEY (`location_id`) REFERENCES location(id),
+  CONSTRAINT `department_id_FOREIGN` FOREIGN KEY (`department_id`) REFERENCES department(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -142,7 +143,7 @@ DROP TABLE IF EXISTS `location`;
 CREATE TABLE `location` (
   `id` int(11) NOT NULL,
   `name` varchar(512) DEFAULT NULL,
-  `address` mediumtext,
+  `address` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

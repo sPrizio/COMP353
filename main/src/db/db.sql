@@ -25,13 +25,14 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `department` (
-  `id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(512) NOT NULL,
-  `manager_id` int(11) NOT NULL,
+  `manager_id` int(11) UNSIGNED NOT NULL,
   `manager_start_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`),
-  UNIQUE KEY `manager_id_UNIQUE` (`manager_id`)
+  UNIQUE KEY `manager_id_UNIQUE` (`manager_id`),
+  CONSTRAINT `manager_id_FOREIGN` FOREIGN KEY (`manager_id`) REFERENCES employee(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,13 +54,13 @@ DROP TABLE IF EXISTS `dependent`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dependent` (
-  `id` int(11) NOT NULL,
-  `first_name` varchar(512) DEFAULT NULL,
-  `last_name` varchar(512) DEFAULT NULL,
-  `sin` int(11) DEFAULT NULL,
-  `date_of_birth` date DEFAULT NULL,
-  `gender` char(1) DEFAULT NULL,
-  `employee_id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
+  `first_name` varchar(512) NOT NULL,
+  `last_name` varchar(512) NOT NULL,
+  `sin` int(11) NOT NULL,
+  `date_of_birth` date NOT NULL,
+  `gender` char(1) NOT NULL,
+  `employee_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sin_UNIQUE` (`sin`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -83,18 +84,19 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employee` (
-  `id` int(11) NOT NULL,
-  `first_name` varchar(255) DEFAULT NULL,
-  `last_name` varchar(255) DEFAULT NULL,
-  `sin` int(11) DEFAULT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
+  `sin` int(11) UNSIGNED NOT NULL,
   `date_of_birth` date DEFAULT NULL,
-  `address` varchar(512) DEFAULT NULL,
+  `address` varchar(512) NOT NULL,
   `phone` char(12) DEFAULT NULL,
-  `salary` int(11) DEFAULT NULL,
-  `gender` char(1) DEFAULT NULL,
-  `department_id` int(11) DEFAULT NULL,
+  `salary` int(11) UNSIGNED NOT NULL,
+  `gender` char(1) NOT NULL,
+  `department_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `sin_UNIQUE` (`sin`)
+  UNIQUE KEY `sin_UNIQUE` (`sin`),
+  CONSTRAINT `department_id_FOREIGN` FOREIGN KEY(`department_id`) references department(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -116,10 +118,10 @@ DROP TABLE IF EXISTS `located_in`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `located_in` (
-  `location_id` int(11) NOT NULL,
-  `department_id` int(11) NOT NULL,
-  CONSTRAINT `location_id_FOREIGN` FOREIGN KEY (`location_id`) REFERENCES location(id),
-  CONSTRAINT `department_id_FOREIGN` FOREIGN KEY (`department_id`) REFERENCES department(id)
+  `location_id` int(11) UNSIGNED NOT NULL,
+  `department_id` int(11) UNSIGNED NOT NULL,
+  CONSTRAINT `location_id_FOREIGN` FOREIGN KEY (`location_id`) REFERENCES location(id) ON DELETE CASCADE,
+  CONSTRAINT `department_id_FOREIGN-A` FOREIGN KEY (`department_id`) REFERENCES department(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -141,7 +143,7 @@ DROP TABLE IF EXISTS `location`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `location` (
-  `id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(512) DEFAULT NULL,
   `address` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
@@ -167,9 +169,9 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
-  `id` int(11) NOT NULL,
+  `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(512) DEFAULT NULL,
-  `location_id` int(11) DEFAULT NULL,
+  `location_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -193,9 +195,10 @@ DROP TABLE IF EXISTS `responsible_for`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `responsible_for` (
-  `department_id` int(11) NOT NULL,
-  `project_id` int(11) NOT NULL,
-  PRIMARY KEY (`department_id`,`project_id`)
+  `department_id` int(11) UNSIGNED NOT NULL,
+  `project_id` int(11) UNSIGNED NOT NULL,
+  CONSTRAINT `department_id_FOREIGN-B` FOREIGN KEY (`department_id`)  REFERENCES department(id) ON DELETE CASCADE,
+  CONSTRAINT `project_id_FOREIGN-B` FOREIGN KEY (`project_id`)  REFERENCES project(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -217,9 +220,10 @@ DROP TABLE IF EXISTS `role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `role` (
-  `employee_id` int(11) NOT NULL,
-  `supervisor_id` int(11) NOT NULL,
+  `employee_id` int(11) UNSIGNED NOT NULL,
+  `supervisor_id` int(11) UNSIGNED NOT NULL,
   PRIMARY KEY (`employee_id`,`supervisor_id`),
+  CONSTRAINT `employee_id_FOREIGN-B` FOREIGN KEY (`employee_id`)  REFERENCES employee(id) ON DELETE CASCADE,
   UNIQUE KEY `employee_id_UNIQUE` (`employee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -242,10 +246,11 @@ DROP TABLE IF EXISTS `works_on`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `works_on` (
-  `project_id` int(11) NOT NULL,
-  `employee_id` int(11) NOT NULL,
-  `hours_worked` int(11) DEFAULT NULL,
-  PRIMARY KEY (`project_id`,`employee_id`)
+  `project_id` int(11) UNSIGNED NOT NULL,
+  `employee_id` int(11) UNSIGNED NOT NULL,
+  `hours_worked` int(11) UNSIGNED DEFAULT 0,
+   CONSTRAINT `project_id_FOREIGN-A` FOREIGN KEY (`project_id`) REFERENCES project(id) ON DELETE CASCADE,
+   CONSTRAINT `employee_id_FOREIGN-A` FOREIGN KEY (`employee_id`) REFERENCES employee(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

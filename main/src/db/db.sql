@@ -26,10 +26,12 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `department` (
   `id` int(11) NOT NULL,
-  `name` varchar(512) DEFAULT NULL,
+  `name` varchar(512) NOT NULL,
   `manager_id` int(11) NOT NULL,
+  `manager_start_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`)
+  UNIQUE KEY `name_UNIQUE` (`name`),
+  UNIQUE KEY `manager_id_UNIQUE` (`manager_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -39,7 +41,7 @@ CREATE TABLE `department` (
 
 LOCK TABLES `department` WRITE;
 /*!40000 ALTER TABLE `department` DISABLE KEYS */;
-INSERT INTO `department` VALUES (1,'Support',41),(2,'Human Resources',89),(3,'Engineering',36),(4,'Marketing',95),(5,'Sales',69),(6,'Product Management',57),(7,'Business Development',22),(8,'Research and Development',82),(9,'Training',1),(10,'Accounting',51);
+INSERT INTO `department` VALUES (1,'Support',41,'1963-11-10'),(2,'Human Resources',89,'1964-11-10'),(3,'Engineering',36,'1965-11-10'),(4,'Marketing',95,'1966-11-10'),(5,'Sales',69,'1967-11-10'),(6,'Product Management',57,'1967-11-10'),(7,'Business Development',22,'1967-11-10'),(8,'Research and Development',82,'1967-11-10'),(9,'Training',1,'1967-11-10'),(10,'Accounting',51,'1999-10-01');
 /*!40000 ALTER TABLE `department` ENABLE KEYS */;
 UNLOCK TABLES;
 

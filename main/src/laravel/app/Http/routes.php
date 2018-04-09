@@ -770,7 +770,8 @@ Route::get('/project/view/{id}', function ($id) {
         $department = DB::select('SELECT * FROM responsible_for, department WHERE department_id = id AND project_id = :id;', ['id' => $id]);
         $employees = DB::select('SELECT * FROM works_on, employee WHERE id = employee_id AND project_id = :id ORDER BY id', ['id' => $id]);
         $sum_employees = DB::select('SELECT COUNT(id) FROM works_on, employee WHERE id = employee_id AND project_id = :id', ['id' => $id]);
-        $sum_hours = DB::select('SELECT SUM(hours_worked) FROM works_on, employee WHERE id = employee_id AND project_id = :id', ['id' => $id]);;
+        $sum_hours = DB::select('SELECT SUM(hours_worked) FROM works_on, employee WHERE id = employee_id AND project_id = :id', ['id' => $id]);
+        $total_pay = 0;#DB::select('', ['id' => $id]);
 
         $dept = null;
 
@@ -778,7 +779,7 @@ Route::get('/project/view/{id}', function ($id) {
             $dept = $department[0];
         }
 
-        return view('project/project', [PROJECT => $project[0], DEPARTMENT => $dept, LOCATIONS => $locations, DEPARTMENTS => $departments, EMPLOYEES => $employees, 'sum_employees' => $sum_employees[0]->{'COUNT(id)'}, 'sum_hours' => $sum_hours[0]->{'SUM(hours_worked)'}]);
+        return view('project/project', [PROJECT => $project[0], DEPARTMENT => $dept, LOCATIONS => $locations, DEPARTMENTS => $departments, EMPLOYEES => $employees, 'sum_employees' => $sum_employees[0]->{'COUNT(id)'}, 'sum_hours' => $sum_hours[0]->{'SUM(hours_worked)'}, 'total_pay' => $total_pay]);
     }
 
     return PROJECT_NOT_FOUND;

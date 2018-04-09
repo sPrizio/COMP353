@@ -59,6 +59,9 @@
                 <p class="attribute">
                     Phase: <span class="text-capitalize">{{ $project->phase }}</span>
                 </p>
+                <p class="attribute">
+                    Total Pay: ${{ $total_pay }}
+                </p>
             </div>
         </div>
     </div>

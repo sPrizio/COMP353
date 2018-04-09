@@ -89,6 +89,7 @@
                 <th>ID</th>
                 <th class="align-left">Name</th>
                 <th class="align-left">Location</th>
+                <th class="align-left">Phase</th>
                 <th></th>
             </tr>
             </thead>
@@ -102,6 +103,7 @@
                     <td class="align-left">
                         {{ Helper::getLocationName($project->location_id, $locations) }}
                     </td>
+                    <td class="align-left text-capitalize">{{ $project->phase }}</td>
                     <td>
                         <form action="/department/{{ $department->id }}/project/{{ $project->id }}/delete" method="post">
                             <button class="waves-effect waves-dark btn" type="submit">

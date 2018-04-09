@@ -35,6 +35,15 @@
                     </select>
                     <label>Department</label>
                 </div>
+                <div class="input-field col s6">
+                    <select name="phase">
+                        <option value="preliminary">Preliminary</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                        <option value="complete">Complete</option>
+                    </select>
+                    <label>Phase</label>
+                </div>
             </div>
             <div class="align-right">
                 <button class="btn waves-effect waves-light" type="submit" name="action">

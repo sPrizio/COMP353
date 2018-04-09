@@ -799,7 +799,7 @@ Route::post('/project/create', function () {
     $location = Input::get(LOCATION);
     $dept = Input::get(DEPARTMENT);
 
-    DB::insert('INSERT INTO project(name, location_id) VALUES (?, ?)', [$name, $location]);
+    DB::insert('INSERT INTO project(name, location_id, phase) VALUES (?, ?, ?)', [$name, $location, 'preliminary']);
     $p_id = DB::select('SELECT * FROM project WHERE name = :n AND location_id = :id', ['n' => $name, 'id' => $location]);
 
     DB::insert('INSERT INTO responsible_for(department_id, project_id) VALUES (?, ?)', [$dept, $p_id[0]->id]);
@@ -832,8 +832,9 @@ Route::post('/project/{id}/edit', function ($id) {
         $name = Input::get('name');
         $location = Input::get(LOCATION);
         $dept = Input::get(DEPARTMENT);
+        $phase = Input::get('phase');
 
-        DB::update('UPDATE project SET name = ?, location_id = ? WHERE id = ?', [$name, $location, $project[0]->id]);
+        DB::update('UPDATE project SET name = ?, location_id = ?, phase = ? WHERE id = ?', [$name, $location, $phase, $project[0]->id]);
         DB::update('UPDATE responsible_for SET department_id = ? WHERE project_id = ?', [$dept, $project[0]->id]);
 
         $projects = DB::select(PROJECTS_SELECT);

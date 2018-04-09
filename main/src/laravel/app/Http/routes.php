@@ -157,12 +157,6 @@ Route::post('/employee/create', function () {
         $error = true;
     }
 
-    if ($salary < 30000) {
-        $msg = 'Salary cannot be less than $30,000.';
-
-        $error = true;
-    }
-
     //  display error message for incorrect form submission
     if ($error) {
         return $msg;

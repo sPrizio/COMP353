@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `department`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `department` (
-  `id`                 int(11) UNSIGNED NOT NULL,
+  `id`                 int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`               varchar(512)     NOT NULL,
   `manager_id`         int(11) UNSIGNED DEFAULT NULL,
   `manager_start_date` date             DEFAULT NULL,
@@ -35,8 +35,7 @@ CREATE TABLE `department` (
   CONSTRAINT `manager_id_FOREIGN` FOREIGN KEY (`manager_id`) REFERENCES employee (`id`)
     ON DELETE CASCADE
 )
-  ENGINE = InnoDB
-  DEFAULT CHARSET = utf8;
+  ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,7 +62,7 @@ DROP TABLE IF EXISTS `dependent`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dependent` (
-  `id`            int(11) UNSIGNED NOT NULL,
+  `id`            int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `first_name`    varchar(512)     NOT NULL,
   `last_name`     varchar(512)     NOT NULL,
   `sin`           int(11)          NOT NULL,
@@ -75,7 +74,8 @@ CREATE TABLE `dependent` (
   CONSTRAINT `employee_id_FOREIGN-C` FOREIGN KEY (`employee_id`) REFERENCES employee (`id`)
     ON DELETE CASCADE
 )
-  ENGINE = InnoDB
+  ENGINE = InnoDB,
+  AUTO_INCREMENT=302
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -381,7 +381,7 @@ DROP TABLE IF EXISTS `employee`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `employee` (
-  `id`            int(11) UNSIGNED       NOT NULL,
+  `id`            int(11) UNSIGNED       NOT NULL AUTO_INCREMENT,
   `first_name`    varchar(255)           NOT NULL,
   `last_name`     varchar(255)           NOT NULL,
   `sin`           int(11) UNSIGNED       NOT NULL,
@@ -396,7 +396,8 @@ CREATE TABLE `employee` (
   CONSTRAINT `department_id_FOREIGN` FOREIGN KEY (`department_id`) references department (`id`)
     ON DELETE CASCADE
 )
-  ENGINE = InnoDB
+  ENGINE = InnoDB,
+  AUTO_INCREMENT=205
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -653,13 +654,14 @@ DROP TABLE IF EXISTS `location`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `location` (
-  `id`      int(11) UNSIGNED NOT NULL,
+  `id`      int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`    varchar(512) DEFAULT NULL,
   `address` mediumtext       NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 )
-  ENGINE = InnoDB
+  ENGINE = InnoDB,
+  AUTO_INCREMENT=8
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -685,7 +687,7 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
-  `id`          int(11) UNSIGNED NOT NULL,
+  `id`          int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name`        varchar(512)     NOT NULL,
   `location_id` int(11) UNSIGNED NOT NULL,
   `phase`       varchar(255)     NOT NULL,
@@ -694,7 +696,8 @@ CREATE TABLE `project` (
   CONSTRAINT `location_id_FOREIGN-A` FOREIGN KEY (`location_id`) REFERENCES location (`id`)
     ON DELETE CASCADE
 )
-  ENGINE = InnoDB
+  ENGINE = InnoDB,
+  AUTO_INCREMENT=40
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

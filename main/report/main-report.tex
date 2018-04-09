@@ -19,6 +19,7 @@
 \usepackage{array}
 \usepackage{multirow}
 \usepackage{longtable}
+
 \lstset{
 	basicstyle=\ttfamily,
 	columns=fullflexible,
@@ -30,6 +31,7 @@
 %%Graphics packs
 \usepackage{ulem}
 \usepackage{geometry, tikz}
+  \usepackage{graphicx}
 \usetikzlibrary{shapes,shadows,arrows.meta}
 \geometry{
     a4paper,
@@ -55,97 +57,9 @@
 \end{titlepage}
 	
 		\maketitle
-	
-		
-	\newcommand{\XSHIFT}{7em}
-	\newcommand{\YSHIFT}{0em}
-	
-	\tikzset{Item/.style={line width=0.14em}}
-	\tikzset{Weak/.style={style=dashed}}
-	\tikzset{EntitySet/.style={Item, rectangle,draw,fill={rgb:red,4;green,2;blue,1;white,9},inner sep=0.8em,drop shadow={shadow xshift=.5em,  shadow yshift=-.2em},node distance=14em}}
-	\tikzset{WeakEntitySet/.style={EntitySet, Weak, Item}}
-	\tikzset{Attribute/.style={Item,ellipse,draw,fill={rgb:red,1;green,1;blue,1;white,35},,drop shadow={shadow xshift=.35em, shadow yshift=-.1em},node distance=5.0em}}
-	\tikzset{Relationship/.style={Item, diamond,draw,fill={rgb:red,0;blue,3;green,1;white,9},,drop shadow={shadow xshift=.25em,  shadow yshift=-.2em}, node distance=10em,aspect=3}}
-	\tikzset{WeakRelationship/.style={Relationship, Weak, Item}}
-	
-	%%
-	\tikzset{OneLine/.style={draw, =Stealth, line width=0.21em}}
-	\tikzset{AttributeLine/.style={draw, =Latex, line width=0.09em}}
-	\tikzset{ManyLine/.style={draw={rgb:red,1;green,1;blue,1;black,10}, -{Stealth[fill={rgb:red,0;blue,0;green,1;black,6}, width=2em]},thick, line width=0.21em}}	
-	
+		\newcommand{\graphicwidth}{18.5cm}
 	\section{Entity Relationship Diagram}
-	\begin{center}
-		\begin{tikzpicture}
-		%Construct the entity->attribute relations
-		%%Students (SID, Name, gender, email), 
-		\node[EntitySet](students){\textbf{Students}};
-		\node[Attribute, above of=students](sid){\uline{SID}};
-		\node[Attribute, left of=sid](name){Name};
-		\node[Attribute, left of=sid,yshift=-3em,xshift=-3em](gender){Gender};
-		\node[Attribute, right of=sid](email){Email};
-		
-		\path[AttributeLine](sid)--(students);
-		\path[AttributeLine](email)--(students);
-		\path[AttributeLine](name)--(students);
-		\path[AttributeLine](gender)--(students);
-		
-		%%Members (SID, TID, dateJoined,role), 
-		\node[Relationship, below of=students, yshift=\YSHIFT](members){\textbf{Members}};
-		%\node[Attribute, right of=members](sid_mem){\uline{SID}};
-		%\node[Attribute, above of=members](tid){TID};
-		\node[Attribute, left of=members,below of=members,yshift=0.2em](datejoined){dateJoined};
-		\node[Attribute, above of=members,left of=members](role){Role};
-		
-		%\path[AttributeLine](sid_mem)--(members);
-		%\path[AttributeLine](tid)--(members);
-		\path[AttributeLine](datejoined)--(members);
-		\path[AttributeLine](role)--(members);
-		
-		%%Demos (SID, TID, Date, time, grade)
-		\node[EntitySet, right of=students, xshift=\XSHIFT](demos){\textbf{Demos}};
-		\node[Attribute, right of=demos](sid_dem){\uline{SID}};
-		\node[Attribute, below of=sid_dem](date){Date};
-		\node[Attribute, above of=demos](tid_dem){\uline{TID}};
-		\node[Attribute, right of=demos,above of=demos](time){Time};
-		\node[Attribute, left of=tid_dem](grade){Grade};
-		
-		\path[AttributeLine](sid_dem)--(demos);
-		\path[AttributeLine](date)--(demos);
-		\path[AttributeLine](tid_dem)--(demos);
-		\path[AttributeLine](time)--(demos);
-		\path[AttributeLine](grade)--(demos);
-		
-		%%Projects (PID, Name)
-		\node[EntitySet, below of=members,left of=demos, xshift=\XSHIFT, yshift=-3.5em](projects){\textbf{Projects}};
-		\node[Attribute,below of=projects](pid){\uline{PID}};
-		\node[Attribute, right of=projects,xshift=1em](name){Name};
-		
-		\path[AttributeLine](pid)--(projects);
-		\path[AttributeLine](name)--(projects);
-		
-		%%Teams (TID, LeaderID, NoOfMembers), 
-		\node[EntitySet, below of=members,yshift=\YSHIFT](teams){\textbf{Teams}};
-		\node[Attribute,left of=teams, xshift=-2.0em](tid){\uline{TID}};
-		\node[Attribute, below of=teams, yshift=-0.5em, xshift=1.5em](leaderid){LeaderID};
-		\node[Attribute, below of=teams, left of=teams, xshift=-2em, text width=4em](noofmem){NoOf Members};
-		
-		\path[AttributeLine](tid)--(teams);
-		\path[AttributeLine](leaderid)--(teams);
-		\path[AttributeLine](noofmem)--(teams);
-		
-		%Relation connections
-		
-		\path[OneLine](students)--(members);
-		\path[ManyLine](members)--(teams);
-		\path[ManyLine](members)-|(demos);
-		
-		\end{tikzpicture}		
-	\end{center}
-	
-		
-	
-	\pagebreak
-
+\includegraphics[width=\graphicwidth]{erd.png}
 	\section{Reasonable Assumptions and Constraints}
 	
 In the COMPANY database There are three primary categories of entity from which more complex entities are defined. These are:
@@ -189,5 +103,70 @@ Responsible\_for is used to connect the projects to the departments. It consists
 
 Located\_in is needed due to the assumption that a department is not necessarily tied down to one location. It consists of unsigned foreign keys linking a location\_id to a department.
 
+	\section{ER to Relation conversion }
+
+\section {Normalization steps and assumptions}
+
+\section{Implemented Functionalities}
+	\subsection{Design Functionalities}
+	The application makes use of the PHP 5.5.9 language due to it's reliable and simple functions for connecting with a MySQL database and forms to send queries to the database. In order to more easily input queries and build a front end system for users to interact with the database, Lavarel has been used to make development easier and have a more modern appearance.\\
 	
+	The company database consists of the tables: `department` allowing the storage of information on a department, `located\_in` providing the location of a department, a `location` table holding a set of locations the company operates in, `responsible\_for` linking the department to a multiple set of projects; `project` which covers details such as project completion and location, `works\_on` which indicates what employee works on what project; `Employee` which contains details on the staff of the company, `role` which specifies who is a supervisor and who is supervised, and `dependent` which is an employees dependents required for insurance purposes.
+	Certain queries are used to allow the user to fulfill certain required functionalities.\\
+	
+	\subsection{Query Functionalities}
+	24 Queries allow the system to select, update and add to the company database. These are in the form of .php filenames found in the source code folder.
+	\subsubsection{delete\_department.php}
+	DELETE FROM department WHERE department.id ='\$id'
+	\subsubsection{get\_all\_projects\_for\_department.php}
+	\subsubsection{get\_employee\_dependents.php}
+	\subsubsection{get\_employee\_involved\_in\_least\_num\_of\_projects.php}
+	\subsubsection{get\_employee\_involved\_in\_most\_num\_of\_projects.php}
+	\subsubsection{get\_employee\_supervisor.php}
+	\subsubsection{get\_employees\_who\_work\_on\_a\_project.php}
+	\subsubsection{get\_hours\_worked\_employee.php}
+	\subsubsection{get\_how\_much\_employee\_gets.php}
+	\subsubsection{get\_project\_location.php}
+	\subsubsection{get\_total\_hours\_worked\_for\_project.php}
+	\subsubsection{get\_total\_pay\_for\_each\_project.php}
+	\subsubsection{get\_how\_much\_employee\_gets.php}
+	\subsubsection{get\_project\_location.php}
+	\subsubsection{get\_total\_hours\_worked\_for\_project.php}
+	\subsubsection{get\_total\_pay\_for\_each\_project.php}
+	\subsubsection{insert\_department.php}
+	\subsubsection{insert\_dependent.php}
+	\subsubsection{insert\_employee.php}
+	\subsubsection{insert\_located\_in.php}
+	\subsubsection{insert\_location.php}
+	\subsubsection{insert\_project.php}
+	\subsubsection{insert\_responsible\_for.php}
+	\subsubsection{insert\_role.php}
+	\subsubsection{insert\_works\_on.php}
+	
+\section{contributions}
+\subsection{Giovanni Gebran}
+ \begin{itemize}
+\item Database Design
+\end{itemize}
+\subsection{Nizar Belhassan}
+ \begin{itemize}
+\item Database Design
+\item Majority of Queries
+\end{itemize}
+\subsection{Kai Nicoll-Griffith}
+ \begin{itemize}
+\item Database Design
+\item Database Attribute Refinements
+\item Report setup 
+\item Report: ER Diagram
+\item Report: Constraints and assumptions
+\item Report: Functionalities
+\end{itemize}
+\subsection{Stephen Prizio}
+ \begin{itemize}
+	\item Database Design
+	\item Front end Lazarel design
+	\item SQL sample data and database 
+	\item Minority of Queries
+\end{itemize}
 \end{document}

@@ -4,7 +4,7 @@
 <title>Insert Query</title>
 </head>
 <body>
-<H3>INSERT NEW TUPLES TO TABLE EMPLOYEE :</H3><br/>
+<H3>INSERT NEW TUPLES TO TABLE DEPENDENT :</H3><br/>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <label>ID</label><input type="text" name="id" id="id"><br/><br/>
 <label>First Name</label><input type="text" name="first_name" id="first_name"><br/><br/>
@@ -12,10 +12,8 @@
 <label>SIN</label><input type="text" name="sin" id="sin"><br/><br/>
 <label>Date of Birth</label><input type="text" name="date_of_birth" id="date_of_birth"><br/><br/>
 <label>Address</label><input type="text" name="address" id="address"><br/><br/>
-<label>Phone</label><input type="text" name="phone" id="phone"><br/><br/>
-<label>Salary</label><input type="text" name="salary" id="salary"><br/><br/>
 <label>Gender</label><input type="text" name="gender" id="gender"><br/><br/>
-<label>Department ID</label><input type="text" name="department_id" id="department_id"><br/><br/>
+<label>Employee ID</label><input type="text" name="employee_id" id="employee_id"><br/><br/>
 <input type="submit" value="Submit">
 </form>
 
@@ -40,13 +38,10 @@ $first_name = mysqli_real_escape_string($conn, $_POST["first_name"]);
 $last_name = mysqli_real_escape_string($conn, $_POST["last_name"]);
 $sin = mysqli_real_escape_string($conn, $_POST["sin"]);
 $date_of_birth = mysqli_real_escape_string($conn, $_POST["date_of_birth"]);
-$address = mysqli_real_escape_string($conn, $_POST["address"]);
-$phone = mysqli_real_escape_string($conn, $_POST["phone"]);
-$salary = mysqli_real_escape_string($conn, $_POST["salary"]);
 $gender = mysqli_real_escape_string($conn, $_POST["gender"]);
-$department_id = mysqli_real_escape_string($conn, $_POST["department_id"]);
+$employee_id = mysqli_real_escape_string($conn, $_POST["employee_id"]);
 
-$sql  = "INSERT INTO employee (id, first_name, last_name, sin, date_of_birth, address, phone, salary, gender, department_id) VALUES ('$id', '$first_name', '$last_name', '$sin', '$date_of_birth', '$address', '$phone', '$salary', '$gender', '$department_id')";
+$sql  = "INSERT INTO dependent (id, first_name, last_name, sin, date_of_birth, gender, employee_id) VALUES ('$id', '$first_name', '$last_name', '$sin', '$date_of_birth','$gender', '$employee_id')";
 $result = mysqli_query($conn, $sql);
 
 if ($result) {

@@ -56,6 +56,12 @@
                 <p class="attribute">
                     Total Hours Worked: {{ $sum_hours }}
                 </p>
+                <p class="attribute">
+                    Phase: <span class="text-capitalize">{{ $project->phase }}</span>
+                </p>
+                <p class="attribute">
+                    Total Pay: ${{ $total_pay }}
+                </p>
             </div>
         </div>
     </div>
@@ -81,7 +87,7 @@
                 <th>ID</th>
                 <th class="align-left">Name</th>
                 <th class="align-left">Address</th>
-                <th>Salary</th>
+                <th>Salary ($/hr)</th>
                 <th>Hours Worked</th>
                 <th></th>
                 <th></th>

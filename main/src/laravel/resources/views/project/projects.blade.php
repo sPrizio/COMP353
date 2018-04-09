@@ -22,6 +22,7 @@
             <th>ID</th>
             <th class="align-left">Name</th>
             <th class="align-left">Location</th>
+            <th class="align-left">Phase</th>
         </tr>
         </thead>
         <tbody>
@@ -34,6 +35,7 @@
                 <td class="align-left">
                     <a href='{{ URL("/location/view/{$project->location_id}") }}'>{{ Helper::getLocationName($project->location_id, $locations) }}</a>
                 </td>
+                <td class="align-left text-capitalize">{{ $project->phase }}</td>
             </tr>
         @endforeach
         </tbody>

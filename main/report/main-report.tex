@@ -1,0 +1,193 @@
+\documentclass[11pt,letterpaper]{article}
+%% Coverpage Packs
+\usepackage{wallpaper}
+
+%%Query packs
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{fullpage}
+\usepackage{listings}
+\usepackage{mathtools}
+\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{fixltx2e}
+\usepackage{hyperref}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{longtable}
+\lstset{
+	basicstyle=\ttfamily,
+	columns=fullflexible,
+	breaklines=true,
+	postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+\setlength\parindent{24pt}
+
+%%Graphics packs
+\usepackage{ulem}
+\usepackage{geometry, tikz}
+\usetikzlibrary{shapes,shadows,arrows.meta}
+\geometry{
+    a4paper,
+    total={170mm,257mm},
+    left=20mm,right=20mm,
+    top=20mm,
+}
+
+%%Assumption/Constraint Packs
+\usepackage{enumitem}
+
+\title{Comp353 Project Report}
+\author{Kai Nicoll-Griffith[40012407], Stephen Prizio[40001739], \\Giovanni Gebran[40018637], Nizar Belhassan[27519443]\\\\\bf{Team kzc353\_4}}
+
+\begin{document}
+	
+	
+
+	\begin{titlepage}
+\iffalse
+\tikz[remember picture,overlay] \node[opacity=1.0,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{originality.jpg}};
+\fi
+\end{titlepage}
+	
+		\maketitle
+	
+		
+	\newcommand{\XSHIFT}{7em}
+	\newcommand{\YSHIFT}{0em}
+	
+	\tikzset{Item/.style={line width=0.14em}}
+	\tikzset{Weak/.style={style=dashed}}
+	\tikzset{EntitySet/.style={Item, rectangle,draw,fill={rgb:red,4;green,2;blue,1;white,9},inner sep=0.8em,drop shadow={shadow xshift=.5em,  shadow yshift=-.2em},node distance=14em}}
+	\tikzset{WeakEntitySet/.style={EntitySet, Weak, Item}}
+	\tikzset{Attribute/.style={Item,ellipse,draw,fill={rgb:red,1;green,1;blue,1;white,35},,drop shadow={shadow xshift=.35em, shadow yshift=-.1em},node distance=5.0em}}
+	\tikzset{Relationship/.style={Item, diamond,draw,fill={rgb:red,0;blue,3;green,1;white,9},,drop shadow={shadow xshift=.25em,  shadow yshift=-.2em}, node distance=10em,aspect=3}}
+	\tikzset{WeakRelationship/.style={Relationship, Weak, Item}}
+	
+	%%
+	\tikzset{OneLine/.style={draw, =Stealth, line width=0.21em}}
+	\tikzset{AttributeLine/.style={draw, =Latex, line width=0.09em}}
+	\tikzset{ManyLine/.style={draw={rgb:red,1;green,1;blue,1;black,10}, -{Stealth[fill={rgb:red,0;blue,0;green,1;black,6}, width=2em]},thick, line width=0.21em}}	
+	
+	\section{Entity Relationship Diagram}
+	\begin{center}
+		\begin{tikzpicture}
+		%Construct the entity->attribute relations
+		%%Students (SID, Name, gender, email), 
+		\node[EntitySet](students){\textbf{Students}};
+		\node[Attribute, above of=students](sid){\uline{SID}};
+		\node[Attribute, left of=sid](name){Name};
+		\node[Attribute, left of=sid,yshift=-3em,xshift=-3em](gender){Gender};
+		\node[Attribute, right of=sid](email){Email};
+		
+		\path[AttributeLine](sid)--(students);
+		\path[AttributeLine](email)--(students);
+		\path[AttributeLine](name)--(students);
+		\path[AttributeLine](gender)--(students);
+		
+		%%Members (SID, TID, dateJoined,role), 
+		\node[Relationship, below of=students, yshift=\YSHIFT](members){\textbf{Members}};
+		%\node[Attribute, right of=members](sid_mem){\uline{SID}};
+		%\node[Attribute, above of=members](tid){TID};
+		\node[Attribute, left of=members,below of=members,yshift=0.2em](datejoined){dateJoined};
+		\node[Attribute, above of=members,left of=members](role){Role};
+		
+		%\path[AttributeLine](sid_mem)--(members);
+		%\path[AttributeLine](tid)--(members);
+		\path[AttributeLine](datejoined)--(members);
+		\path[AttributeLine](role)--(members);
+		
+		%%Demos (SID, TID, Date, time, grade)
+		\node[EntitySet, right of=students, xshift=\XSHIFT](demos){\textbf{Demos}};
+		\node[Attribute, right of=demos](sid_dem){\uline{SID}};
+		\node[Attribute, below of=sid_dem](date){Date};
+		\node[Attribute, above of=demos](tid_dem){\uline{TID}};
+		\node[Attribute, right of=demos,above of=demos](time){Time};
+		\node[Attribute, left of=tid_dem](grade){Grade};
+		
+		\path[AttributeLine](sid_dem)--(demos);
+		\path[AttributeLine](date)--(demos);
+		\path[AttributeLine](tid_dem)--(demos);
+		\path[AttributeLine](time)--(demos);
+		\path[AttributeLine](grade)--(demos);
+		
+		%%Projects (PID, Name)
+		\node[EntitySet, below of=members,left of=demos, xshift=\XSHIFT, yshift=-3.5em](projects){\textbf{Projects}};
+		\node[Attribute,below of=projects](pid){\uline{PID}};
+		\node[Attribute, right of=projects,xshift=1em](name){Name};
+		
+		\path[AttributeLine](pid)--(projects);
+		\path[AttributeLine](name)--(projects);
+		
+		%%Teams (TID, LeaderID, NoOfMembers), 
+		\node[EntitySet, below of=members,yshift=\YSHIFT](teams){\textbf{Teams}};
+		\node[Attribute,left of=teams, xshift=-2.0em](tid){\uline{TID}};
+		\node[Attribute, below of=teams, yshift=-0.5em, xshift=1.5em](leaderid){LeaderID};
+		\node[Attribute, below of=teams, left of=teams, xshift=-2em, text width=4em](noofmem){NoOf Members};
+		
+		\path[AttributeLine](tid)--(teams);
+		\path[AttributeLine](leaderid)--(teams);
+		\path[AttributeLine](noofmem)--(teams);
+		
+		%Relation connections
+		
+		\path[OneLine](students)--(members);
+		\path[ManyLine](members)--(teams);
+		\path[ManyLine](members)-|(demos);
+		
+		\end{tikzpicture}		
+	\end{center}
+	
+		
+	
+	\pagebreak
+
+	\section{Reasonable Assumptions and Constraints}
+	
+In the COMPANY database There are three primary categories of entity from which more complex entities are defined. These are:
+\begin{enumerate}[]
+	\item departments, 
+	\item employees,
+	\item projects,
+\end{enumerate}
+
+Since there will need to be multiple links to better define this entity and negative ids are unsightly, departments are identified with a primary key ID which is an unsigned integer value with no auto increment. To easily identify the departments for employees, departments also have a unique name to be identified with. Since departments have people to look after, a manager employee manages the department. Managers are determined by an employee id which is a foreign key against the employee table and to record the date he starts is an attribute manager\_start\_date.
+Both the manager\_id and manager\_start\_date are given the opportunity to be null since it is not always true that a department needs a manager. Small groups could potentially self manage if that is the policy of the company.\\
+
+An Employee entity is a record of who a person within the company database is. Within it there are is no opportunity for optional parameters since it is assumed that a company needs to keep accurate track of everyone within it and null values would encourage poor data management practice of the company. Date of birth is required to keep track of retirement and phone numbers are an item everyone should have. An Employee has an unsigned integer ID, first\_name, last\_name, sin integer(unique due to nature of the SIN), a date of birth(date data type), an address, a phone number(char to enforce field size), an hourly salary(a 5,2 decimal datatype), a gender defined by one character and a linking department id integer for where the employee works. Unless otherwise noted, all datatypes are a varchar. The linking id is a foreign key that can not be null. An employee must work for a department.\\
+
+A project is an item that is worked on by employees. It is assumed that multi-department projects are possible and is therefore given no firm and direct relation to a department within the tables of employee or department. However, it is assumed to be important that a project is given a firm location in where it is based and is therefore given a location\_id tying it to a specific location. It is identified by an unsigned integer ID to reference it(the primary key), a unique an mandatory name for employees to recognize it, and a location(unsigned integer location\_id) where it is worked on within the company. A location is a foreign key against the location entity. None of these attributes may be null as they are required to properly identify a unique project. Also included is a not null phase which keeps track of the progress of each individual project within the COMPANY database since it is assumed that keeping track of all project progress would be very difficult without a database solution.\\
+
+These three main entity sets then are enhanced by the entity sets of:
+\begin{enumerate}[]
+	\item dependent 
+	\item location
+\end{enumerate}
+And the role relation:
+\begin{enumerate}[]
+	\item role 
+\end{enumerate}
+A dependent is an entity that enhances the information of an employee by providing him with insurance information that the company might need to use. As it is vital information that has potential legal importance none of these fields may be null. A dependent has a primary unsigned integer ID to identify it and within it is a SIN as an unsigned integer, the foreign key employee\_id is needed to link the dependent to an employee. Since multiple employees may have with the same dependent the SIN can not be unique for this table. Also necicary for the dependent are the not null attributes of first name, last name, date of birth(date datatype) and a single character gender.  Unless otherwise noted, all datatypes are a varchar. \\
+
+A location identifies where projects and departments are done. It is a list of possible locations where employees report their work to. These locations are identified by an unsigned integer, an optional name which is assumed to be used for employee convenience and an address which is used for more direct positioning and referencing. The name is a varchar, while the address is a medium text since it is assumed that the address could be as specific as country down to room number if the company so wishes.\\
+
+The relationship of role helps to give more information the possible positions of importance an employee can have with his fellow employees. Since this table just defines the role of an employee against employee it does not handle department managers. It is assumed that this relation is solely used to show the hierarchy of employees within the company. It contains both unsigned and not null employee id to recognize the employee who is supervised by the supervisor\_id. Since our assumption is that an employee should only supervise one person, that he may be supervised by someone else and that he may not have a supervisor at all the employee \_id is a primary key enforcing uniqueness and no double counting, while the supervisor\_id is a default null value implying one is unsupervised which could be a possibility. This means an employee may both supervise and be supervised as defined by the role in relation.\\
+
+Finally the assumptions on the relations bellow is that they create the connections between entity sets. These are:
+\begin{enumerate}[]
+	\item works\_on
+	\item responsible\_for
+	\item located\_in
+\end{enumerate}
+It's assumed one employee may work on many projects therefore this table solely uses foreign keys against the project and employee tables that may not be null. Since it is assumed to be important that an employee also logs the number of hours worked on projects(likely for financial and budgeting purposes) this relation also has a none-null default 0 value that keeps track of the hours.\\
+
+Responsible\_for is used to connect the projects to the departments. It consists of unsigned foreign keys between the project and departments since the assumption is that multi department projects are possible.\\
+
+Located\_in is needed due to the assumption that a department is not necessarily tied down to one location. It consists of unsigned foreign keys linking a location\_id to a department.
+
+	
+\end{document}

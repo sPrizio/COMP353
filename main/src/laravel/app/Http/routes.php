@@ -105,7 +105,7 @@ Route::get('/employee/view/{id}', function ($id) {
             $supervisor[0] = null;
         }
 
-        return view(EMPLOYEE_TEMPLATE, [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, DEPENDENTS => $dependents, PROJECT => $project[0], SUPERVISOR => $supervisor[0]]);
+        return view(EMPLOYEE_TEMPLATE, [EMPLOYEE => $employee[0], DEPARTMENTS => $departments, DEPENDENTS => $dependents, PROJECT => $project, SUPERVISOR => $supervisor[0]]);
     }
 
     return EMPLOYEE_NOT_FOUND;

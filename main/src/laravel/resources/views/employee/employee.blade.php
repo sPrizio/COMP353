@@ -101,10 +101,16 @@
                     </p>
                 @else
                     <p class="attribute">
-                        Assigned Project: <a href='{{ URL("/project/view/{$project->id}") }}'>{{ $project->name }}</a>
+                        Assigned Project(s):
+                        @foreach($project as $pro)
+                            <a href='{{ URL("/project/view/{$pro->id}") }}'>{{ $pro->name }}</a>,
+                        @endforeach
                     </p>
                     <p class="attribute">
-                        Hours Worked: {{ $project->hours_worked }}
+                        Hours Worked:
+                        @foreach($project as $pro)
+                            {{ $pro->hours_worked }},
+                        @endforeach
                     </p>
                 @endif
             </div>

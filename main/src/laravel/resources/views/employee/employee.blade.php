@@ -55,7 +55,7 @@
                     Employee ID: {{ $employee->id }}
                 </p>
                 <p class="attribute">
-                    Salary: ${{ $employee->salary }}
+                    Salary: ${{ $employee->salary }}/hr
                 </p>
                 <p class="attribute">
                     Gender: {{ Helper::getFullGender($employee->gender) }}

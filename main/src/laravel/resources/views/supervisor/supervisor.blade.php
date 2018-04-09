@@ -34,7 +34,7 @@
                     Last Name: {{ $supervisor->last_name }}
                 </p>
                 <p class="attribute">
-                    Salary: ${{ $supervisor->salary }}
+                    Salary: ${{ $supervisor->salary }}/hr
                 </p>
                 <p class="attribute">
                     Department: <a

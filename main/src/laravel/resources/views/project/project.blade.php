@@ -81,7 +81,7 @@
                 <th>ID</th>
                 <th class="align-left">Name</th>
                 <th class="align-left">Address</th>
-                <th>Salary</th>
+                <th>Salary ($/hr)</th>
                 <th>Hours Worked</th>
                 <th></th>
                 <th></th>

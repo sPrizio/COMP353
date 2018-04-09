@@ -25,7 +25,7 @@
             <th>DOB</th>
             <th class="align-left">Address</th>
             <th>Phone</th>
-            <th>Salary ($)</th>
+            <th>Salary ($/hr)</th>
             <th>Gender</th>
             <th class="align-left">Department</th>
         </tr>

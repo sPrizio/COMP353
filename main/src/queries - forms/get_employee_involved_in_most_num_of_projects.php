@@ -4,15 +4,9 @@
 <title>Get Query</title>
 </head>
 <body>
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <h3>
-  Please enter the employee's ID to know who is his supervisor :
+Show the employee who is involved in the least number of projects :
 </h3>
-</br>
-<label>EMPLOYEE ID </label><input type="text" name="employee_id" id="employee_id"><br/><br/>
-<input type="submit" value="Submit">
-</form>
-
 </body>
 </html>
 <?php
@@ -27,17 +21,14 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-echo "Connected successfully <br>";
 
-if(isset( $_POST["employee_id"])){
-$employee_id = mysqli_real_escape_string($conn, $_POST["employee_id"]);
-}
-else{
- echo "POST employee_id is not assigned";
-}
-
-
-$sql  = "SELECT dependent.id AS Dependent_ID, dependent.first_name, dependent.last_name FROM dependent, employee WHERE dependent.employee_id='$employee_id' AND employee.id=dependent.employee_id";
+$sql  = "SELECT works_on.employee_id, employee.first_name, employee.last_name
+FROM works_on
+JOIN employee
+on employee.id=works_on.employee_id
+Group by employee_id
+Order by COUNT(project_id) Desc
+LIMIT 1";
 
 if(!empty($sql)){
 $result = mysqli_query($conn, $sql);

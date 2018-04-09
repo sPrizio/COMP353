@@ -6,10 +6,10 @@
 <body>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
 <h3>
-  Please enter the department ID to get all the projects assigned to this department :
+  Please enter the employee's ID to show his salary :
 </h3>
 </br>
-<label>Department ID </label><input type="text" name="department_id" id="department_id"><br/><br/>
+<label>EMPLOYEE ID </label><input type="text" name="employee_id" id="employee_id"><br/><br/>
 <input type="submit" value="Submit">
 </form>
 
@@ -29,14 +29,15 @@ if ($conn->connect_error) {
 }
 echo "Connected successfully <br>";
 
-if(isset($_POST["department_id"])){
-$department_id = mysqli_real_escape_string($conn, $_POST["department_id"]);
+if(isset( $_POST["employee_id"])){
+$employee_id = mysqli_real_escape_string($conn, $_POST["employee_id"]);
 }
 else{
- echo "POST department_id is not assigned";
+ echo "POST employee_id is not assigned";
 }
 
-$sql  = "SELECT responsible_for.project_id AS Project_ID, (SELECT project.name FROM project WHERE responsible_for.project_id=project.id) AS Project_Name FROM responsible_for WHERE department_id = $department_id ";
+
+$sql  = "SELECT employee.salary FROM employee WHERE employee.id=$employee_id";
 
 if(!empty($sql)){
 $result = mysqli_query($conn, $sql);

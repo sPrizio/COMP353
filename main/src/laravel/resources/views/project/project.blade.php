@@ -56,6 +56,9 @@
                 <p class="attribute">
                     Total Hours Worked: {{ $sum_hours }}
                 </p>
+                <p class="attribute">
+                    Phase: <span class="text-capitalize">{{ $project->phase }}</span>
+                </p>
             </div>
         </div>
     </div>

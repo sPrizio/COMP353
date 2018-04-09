@@ -46,7 +46,7 @@
             </div>
             <div class="row">
                 <div class="input-field col s6">
-                    <input id="salary" name="salary" type="number" required>
+                    <input id="salary" name="salary" type="number" step=".01" required>
                     <label for="salary">Salary</label>
                 </div>
                 <div class="input-field col s6">

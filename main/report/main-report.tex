@@ -70,7 +70,7 @@
 	To ensure there will always be relevant `employee` data, there are no optional or null possible parameters possible within the `employee`  table. It is assumed that a company needs to keep accurate track of everyone within it and null values would encourage poor data management practice of the company. A \uline{salary}(a 5,2 decimal datatype) is given to each employee in dollars per hour to make certain queries easier to process. Due to legislation, \uline{gender} attribute is defined by one ambiguous character. An `employee` must work for a single `department`.\\
 	
 		\subsection{project table}
-	 It is assumed that a `project` can not be assigned to multiple `departments`. Also a `project` has a varchar phase attribute which keeps track of the progress of each individual project within the COMPANY database.\\
+	 It is assumed that a `project` can not be assigned to multiple `departments`. Also a `project` has a varchar \uline{phase} attribute which keeps track of the progress of each individual project within the COMPANY database.\\
 
 		\subsection{dependent table}
 The `dependent` table holds vital information that has potential legal importance so none of these fields may be null. A dependent is linked to an `employee` by a foreign key holding \uline{employee\_id} and has the multiplicity of one to many. An `employee` may have many `dependents`. \\
@@ -129,33 +129,61 @@ These three relations were deemed most important and the other relations seen on
 	The application makes use of the PHP 5.5.9 language due to it's reliable and simple functions for connecting with a MySQL database. In order to more easily input queries on the database and build a modern looking front end system, Lavarel has been used to make development easier which adds additional functionality to and shortcuts to front-end design.\\
 
 \subsection{Query Functionalities}
-	24 Queries allow the system to select, update and add to the company database. These are in the form of .php filenames found in the source code folder.
+	21 Queries allow the system to select, update and add to the company database. These are in the form of .php filenames found in the source code folder.
 	\subsubsection{delete\_department.php}
 	DELETE FROM department WHERE department.id ='\$id'
 	\subsubsection{get\_all\_projects\_for\_department.php}
+	SELECT responsible\_for.project\_id AS Project\_ID, (SELECT project.name FROM project WHERE responsible\_for.project\_id=project.id) AS Project\_Name FROM responsible\_for WHERE department\_id = \$department\_id
 	\subsubsection{get\_employee\_dependents.php}
+	SELECT dependent.id AS Dependent\_ID, dependent.first\_name, dependent.last\_name FROM dependent, employee WHERE dependent.employee\_id='\$employee\_id' AND employee.id=dependent.employee\_id
 	\subsubsection{get\_employee\_involved\_in\_least\_num\_of\_projects.php}
+	SELECT works\_on.employee\_id, employee.first\_name, employee.last\_name
+	FROM works\_on
+	JOIN employee
+	on employee.id=works\_on.employee\_id
+	Group by employee\_id
+	Order by COUNT(project\_id) ASC
+	LIMIT 1
 	\subsubsection{get\_employee\_involved\_in\_most\_num\_of\_projects.php}
+	SELECT works\_on.employee\_id, employee.first\_name, employee.last\_name
+	FROM works\_on
+	JOIN employee
+	on employee.id=works\_on.employee\_id
+	Group by employee\_id
+	Order by COUNT(project\_id) Desc
+	LIMIT 1
 	\subsubsection{get\_employee\_supervisor.php}
+	SELECT role.supervisor\_id AS Supervisor\_ID, (SELECT first\_name FROM employee WHERE role.supervisor\_id=employee.id ) AS First\_Name, (SELECT last\_name FROM employee WHERE role.supervisor\_id=employee.id ) AS Last\_Name FROM role, employee WHERE role.employee\_id='\$employee\_id' AND employee.id=role.employee\_id
 	\subsubsection{get\_employees\_who\_work\_on\_a\_project.php}
+	SELECT employee.id AS Manager\_ID,employee.first\_name, employee.last\_name FROM department JOIN responsible\_for ON department.id=responsible\_for.department\_id JOIN employee ON employee.id=department.manager\_id JOIN works\_on ON works\_on.project\_id=responsible\_for.project\_id AND works\_on.employee\_id=department.manager\_id
 	\subsubsection{get\_hours\_worked\_employee.php}
+	SELECT hours\_worked FROM works\_on, employee WHERE employee.id = '\$employee\_id' AND project\_id = '\$project\_id' AND employee.id=works\_on.employee\_id
 	\subsubsection{get\_how\_much\_employee\_gets.php}
+	SELECT employee.salary FROM employee WHERE employee.id=\$employee\_id
 	\subsubsection{get\_project\_location.php}
+	SELECT project.location\_id AS Location\_ID, (SELECT location.name FROM location WHERE project.location\_id=location.id) AS Location\_name, (SELECT location.address FROM location WHERE project.location\_id=location.id) AS Address FROM project WHERE project.id =\$project\_id
 	\subsubsection{get\_total\_hours\_worked\_for\_project.php}
+	SELECT SUM(works\_on.hours\_worked) AS total\_hours FROM works\_on WHERE works\_on.project\_id =\$project\_id
 	\subsubsection{get\_total\_pay\_for\_each\_project.php}
-	\subsubsection{get\_how\_much\_employee\_gets.php}
-	\subsubsection{get\_project\_location.php}
-	\subsubsection{get\_total\_hours\_worked\_for\_project.php}
-	\subsubsection{get\_total\_pay\_for\_each\_project.php}
+	SELECT works\_on.hours\_worked, works\_on.employee\_id, employee.salary From works\_on, employee Where  works\_on.project\_id=2 AND employee.id=works\_on.employee\_id
 	\subsubsection{insert\_department.php}
+	INSERT INTO department (id, name, manager\_id, manager\_start\_date) VALUES ('\$id','\$name','\$manager\_id','\$manager\_start\_date')
 	\subsubsection{insert\_dependent.php}
+	INSERT INTO dependent (id, first\_name, last\_name, sin, date\_of\_birth, gender, employee\_id) VALUES ('\$id', '\$first\_name', '\$last\_name', '\$sin', '\$date\_of\_birth','\$gender', '\$employee\_id')
 	\subsubsection{insert\_employee.php}
+	INSERT INTO employee (id, first\_name, last\_name, sin, date\_of\_birth, address, phone, salary, gender, department\_id) VALUES ('\$id', '\$first\_name', '\$last\_name', '\$sin', '\$date\_of\_birth', '\$address', '\$phone', '\$salary', '\$gender', '\$department\_id')
 	\subsubsection{insert\_located\_in.php}
+	INSERT INTO located\_in (location\_id, department\_id) VALUES ('\$location\_id', '\$department\_id')
 	\subsubsection{insert\_location.php}
+	INSERT INTO location (id, name, address) VALUES ('\$id', '\$name','\$address')
 	\subsubsection{insert\_project.php}
+	INSERT INTO project (id, name, location\_id, phase) VALUES ('\$id', '\$name','\$location\_id', '\$phase')
 	\subsubsection{insert\_responsible\_for.php}
+	INSERT INTO responsible\_for (project\_id, department\_id) VALUES ('\$project\_id', '\$department\_id')
 	\subsubsection{insert\_role.php}
+	INSERT INTO role (employee\_id, supervisor\_id) VALUES ('\$employee\_id', '\$supervisor\_id')
 	\subsubsection{insert\_works\_on.php}
+	INSERT INTO works\_on (project\_id, employee\_id, hours\_worked) VALUES ('\$project\_id','\$employee\_id', '\$hours\_worked')
 	
 \section{contributions}
 \subsection{Giovanni Gebran}
@@ -171,7 +199,7 @@ These three relations were deemed most important and the other relations seen on
  \begin{itemize}
 \item Database Design
 \item Database Attribute Refinements
-\item Report setup 
+\item Report setup and latex entry
 \item Report: ER Diagram
 \item Report: Constraints and assumptions
 \item Report: Functionalities

@@ -77,6 +77,7 @@
                     <a href="/supervisors">Supervisors</a>
                     <a href="/projects">Projects</a>
                     <a href="/locations">Locations</a>
+                    <a href="/statistics">Statistics</a>
                 </div>
             </div>
         </div>

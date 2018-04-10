@@ -42,6 +42,9 @@
                     Manager: <a
                             href='{{ URL("/employee/view/{$department->manager_id}") }}'>{{ Helper::getManagerName($department->manager_id, $employee_list) }}</a>
                 </p>
+                <p class="attribute">
+                    Total Pay: ${{ $total_pay }}
+                </p>
             </div>
         </div>
         <div class="col l6 m12 s12">

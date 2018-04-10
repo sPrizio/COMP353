@@ -406,8 +406,9 @@ Route::get('/department/view/{id}', function ($id) {
         $locations = DB::select('SELECT * FROM located_in, location WHERE location_id = id AND department_id = :id', ['id' => $id]);
         $projects = DB::select('SELECT * FROM responsible_for, project WHERE project_id = id AND department_id = :id ORDER BY project_id', ['id' => $id]);
         $employees = DB::select('SELECT * FROM comp353_main_project.employee WHERE department_id = :id ORDER BY last_name', ['id' => $id]);
+        $total_pay = DB::select('SELECT SUM(salary * hours_worked) as \'Pay\', department_id FROM works_on, employee, project WHERE employee_id = employee.id AND project_id = project.id AND department_id=:id GROUP BY department_id', ['id' => $id]);
 
-        return view('department/department', [DEPARTMENT => $department[0], 'employee_list' => $employee_list, LOCATIONS => $locations, PROJECTS => $projects, EMPLOYEES => $employees]);
+        return view('department/department', [DEPARTMENT => $department[0], 'employee_list' => $employee_list, LOCATIONS => $locations, PROJECTS => $projects, EMPLOYEES => $employees, 'total_pay' => $total_pay[0]->{'Pay'}]);
     }
 
     return DEPARTMENT_NOT_FOUND;
@@ -771,7 +772,7 @@ Route::get('/project/view/{id}', function ($id) {
         $employees = DB::select('SELECT * FROM works_on, employee WHERE id = employee_id AND project_id = :id ORDER BY id', ['id' => $id]);
         $sum_employees = DB::select('SELECT COUNT(id) FROM works_on, employee WHERE id = employee_id AND project_id = :id', ['id' => $id]);
         $sum_hours = DB::select('SELECT SUM(hours_worked) FROM works_on, employee WHERE id = employee_id AND project_id = :id', ['id' => $id]);
-        $total_pay = 0;#DB::select('', ['id' => $id]);
+        $total_pay = DB::select('SELECT SUM(Pay) FROM (SELECT works_on.hours_worked, works_on.employee_id, employee.salary, (hours_worked * salary) AS Pay FROM works_on, employee WHERE  works_on.project_id=:id AND employee.id=works_on.employee_id) as Payed;', ['id' => $id]);
 
         $dept = null;
 
@@ -779,7 +780,7 @@ Route::get('/project/view/{id}', function ($id) {
             $dept = $department[0];
         }
 
-        return view('project/project', [PROJECT => $project[0], DEPARTMENT => $dept, LOCATIONS => $locations, DEPARTMENTS => $departments, EMPLOYEES => $employees, 'sum_employees' => $sum_employees[0]->{'COUNT(id)'}, 'sum_hours' => $sum_hours[0]->{'SUM(hours_worked)'}, 'total_pay' => $total_pay]);
+        return view('project/project', [PROJECT => $project[0], DEPARTMENT => $dept, LOCATIONS => $locations, DEPARTMENTS => $departments, EMPLOYEES => $employees, 'sum_employees' => $sum_employees[0]->{'COUNT(id)'}, 'sum_hours' => $sum_hours[0]->{'SUM(hours_worked)'}, 'total_pay' => $total_pay[0]->{'SUM(Pay)'}]);
     }
 
     return PROJECT_NOT_FOUND;
@@ -1017,4 +1018,37 @@ Route::post('/location/{id}/delete', function ($id) {
     }
 
     return LOCATION_NOT_FOUND;
+});
+
+//  COMPANY STATISTICS
+Route::get('/statistics', function () {
+    $values = [
+        'departments' => DB::select(DEPARTMENT_SELECT),
+        'projects' => DB::select(PROJECTS_SELECT),
+        'dept_count' => DB::table('department')->count(),
+        'emp_count' => DB::table('employee')->count(),
+        'pro_count' => DB::table('project')->count(),
+        'loc_count' => DB::table('location')->count(),
+        'max_emp' => DB::select('SELECT COUNT(department_id) as \'Count\', department_id FROM employee GROUP BY department_id ORDER BY COUNT(department_id) DESC LIMIT 1'),
+        'min_emp' => DB::select('SELECT COUNT(department_id) as \'Count\', department_id FROM employee GROUP BY department_id ORDER BY COUNT(department_id) ASC LIMIT 1'),
+        'max_pro' => DB::select('SELECT COUNT(project_id) as \'Count\', department_id FROM responsible_for GROUP BY department_id ORDER BY COUNT(department_id) DESC LIMIT 1'),
+        'min_pro' => DB::select('SELECT COUNT(project_id) as \'Count\', department_id FROM responsible_for GROUP BY department_id ORDER BY COUNT(department_id) ASC LIMIT 1'),
+        'dep_high' => DB::select('SELECT SUM(salary * hours_worked) as \'Pay\', department_id FROM works_on, employee, project WHERE employee_id = employee.id AND project_id = project.id GROUP BY department_id ORDER BY SUM(salary * hours_worked) DESC LIMIT 1'),
+        'dep_low' => DB::select('SELECT SUM(salary * hours_worked) as \'Pay\', department_id FROM works_on, employee, project WHERE employee_id = employee.id AND project_id = project.id GROUP BY department_id ORDER BY SUM(salary * hours_worked) ASC LIMIT 1'),
+        'pro_high' => DB::select('SELECT project_id, project.name, SUM(salary * hours_worked) as \'Pay\' FROM works_on, employee, project WHERE employee_id = employee.id AND project_id = project.id GROUP BY project_id ORDER BY SUM(salary * hours_worked) DESC LIMIT 1'),
+        'pro_low' => DB::select('SELECT project_id, project.name, SUM(salary * hours_worked) as \'Pay\' FROM works_on, employee, project WHERE employee_id = employee.id AND project_id = project.id GROUP BY project_id ORDER BY SUM(salary * hours_worked) ASC LIMIT 1'),
+        'pro_max' => DB::select('SELECT project_id, COUNT(employee_id) as \'Count\', project.name FROM works_on, project WHERE project_id = project.id GROUP BY project_id ORDER BY COUNT(employee_id) DESC LIMIT 1'),
+        'pro_min' => DB::select('SELECT project_id, COUNT(employee_id) AS \'Count\', project.name FROM works_on, project WHERE project_id = project.id GROUP BY project_id ORDER BY COUNT(employee_id) ASC LIMIT 1'),
+        'pro_tot' => DB::select('SELECT SUM(Pay) FROM (SELECT project_id, project.name, SUM(salary * hours_worked) as Pay FROM works_on, employee, project WHERE employee_id = employee.id AND project_id = project.id GROUP BY project_id) AS P'),
+        'pro_tot_hr' => DB::select('SELECT SUM(hours_worked) as \'Count\' FROM works_on'),
+        'emp_max' => DB::select('SELECT COUNT(project_id) as \'Count\', works_on.employee_id, employee.first_name, employee.last_name FROM works_on JOIN employee on employee.id=works_on.employee_id Group by employee_id Order by COUNT(project_id) DESC LIMIT 1'),
+        'emp_min' => DB::select('SELECT COUNT(project_id) as \'Count\', works_on.employee_id, employee.first_name, employee.last_name FROM works_on JOIN employee on employee.id=works_on.employee_id Group by employee_id Order by COUNT(project_id) ASC LIMIT 1'),
+        'sup_max' => DB::select('SELECT COUNT(employee_id) as \'Count\', supervisor_id, first_name, last_name FROM role, employee WHERE supervisor_id = id GROUP BY supervisor_id ORDER BY COUNT(employee_id) DESC LIMIT 1'),
+        'sup_min' => DB::select('SELECT COUNT(employee_id) as \'Count\', supervisor_id, first_name, last_name FROM role, employee WHERE supervisor_id = id GROUP BY supervisor_id ORDER BY COUNT(employee_id) ASC LIMIT 1;'),
+        'sal_tot' => DB::select('SELECT SUM(salary) as \'Count\' FROM employee'),
+        'loc_max' => DB::select('SELECT location_id, location.name, COUNT(project.id) as \'Count\' FROM project, location WHERE project.id IN (SELECT project_id FROM responsible_for WHERE department_id IN (SELECT department_id FROM located_in)) AND location_id = location.id GROUP BY location_id ORDER BY COUNT(project.id) DESC LIMIT 1'),
+        'loc_min' => DB::select('SELECT location_id, location.name, COUNT(project.id) as \'Count\' FROM project, location WHERE project.id IN (SELECT project_id FROM responsible_for WHERE department_id IN (SELECT department_id FROM located_in)) AND location_id = location.id GROUP BY location_id ORDER BY COUNT(project.id) ASC LIMIT 1')
+    ];
+
+    return view('statistics/statistics', $values);
 });

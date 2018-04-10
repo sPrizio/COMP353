@@ -28,6 +28,7 @@
             <li><a href="/supervisors">Supervisors</a></li>
             <li><a href="/projects">Projects</a></li>
             <li><a href="/locations">Locations</a></li>
+            <li><a href="/statistics">Statistics</a></li>
         </ul>
     </div>
 </nav>
@@ -38,6 +39,7 @@
     <li><a href="/supervisors">Supervisors</a></li>
     <li><a href="/projects">Projects</a></li>
     <li><a href="/locations">Locations</a></li>
+    <li><a href="/statistics">Statistics</a></li>
 </ul>
 
 <div class="container">

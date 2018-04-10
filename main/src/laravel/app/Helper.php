@@ -107,6 +107,23 @@ class Helper {
     }
 
     /**
+     * Finds the name of a project for a given id
+     *
+     * @param int $id project id
+     * @param array $pros list of projects
+     * @return string project's name
+     */
+    public static function getProjectName(int $id, array $pros) {
+        foreach ($pros as $pro) {
+            if ($pro->id == $id) {
+                return $pro->name;
+            }
+        }
+
+        return 'None';
+    }
+
+    /**
      * Checks if an employee's sin already exists in the DB
      *
      * @param int $sin social insurance number

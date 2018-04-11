@@ -1,0 +1,39 @@
+\contentsline {section}{\numberline {1}Entity Relationship Diagram}{2}{section.1}
+\contentsline {section}{\numberline {2}Reasonable Assumptions}{3}{section.2}
+\contentsline {subsection}{\numberline {2.1}General cases}{3}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}department table}{3}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}employee table}{3}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}project table}{3}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}dependent table}{3}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}location table}{3}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}supervised\_by table}{3}{subsection.2.7}
+\contentsline {subsection}{\numberline {2.8}depends\_on relation}{4}{subsection.2.8}
+\contentsline {subsection}{\numberline {2.9}works\_on relation}{4}{subsection.2.9}
+\contentsline {subsection}{\numberline {2.10}works\_in relation}{4}{subsection.2.10}
+\contentsline {subsection}{\numberline {2.11}responsible\_for relation}{4}{subsection.2.11}
+\contentsline {subsection}{\numberline {2.12}project\_located\_in relation}{4}{subsection.2.12}
+\contentsline {subsection}{\numberline {2.13}department\_located\_in relation}{4}{subsection.2.13}
+\contentsline {section}{\numberline {3}ER to Relation conversion }{5}{section.3}
+\contentsline {section}{\numberline {4}Implemented Functionalities}{6}{section.4}
+\contentsline {subsection}{\numberline {4.1}Database design}{6}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Language and tools}{6}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Query Functionalities}{6}{subsection.4.3}
+\contentsline {subsubsection}{\numberline {4.3.1}Department}{7}{subsubsection.4.3.1}
+\contentsline {subsubsection}{\numberline {4.3.2}Employee}{8}{subsubsection.4.3.2}
+\contentsline {subsubsection}{\numberline {4.3.3}Supervisor}{9}{subsubsection.4.3.3}
+\contentsline {subsubsection}{\numberline {4.3.4}Projects}{9}{subsubsection.4.3.4}
+\contentsline {subsubsection}{\numberline {4.3.5}Location}{10}{subsubsection.4.3.5}
+\contentsline {subsubsection}{\numberline {4.3.6}Statistics}{11}{subsubsection.4.3.6}
+\contentsline {section}{\numberline {5}Normalization Steps and Assumptions}{15}{section.5}
+\contentsline {subsection}{\numberline {5.1}Functional Dependencies}{15}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Normalization Process}{15}{subsection.5.2}
+\contentsline {subsubsection}{\numberline {5.2.1}1NF}{15}{subsubsection.5.2.1}
+\contentsline {subsubsection}{\numberline {5.2.2}2NF}{15}{subsubsection.5.2.2}
+\contentsline {subsubsection}{\numberline {5.2.3}3NF}{15}{subsubsection.5.2.3}
+\contentsline {subsection}{\numberline {5.3}Assumptions}{15}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Of Functional Dependencies}{15}{subsubsection.5.3.1}
+\contentsline {section}{\numberline {6}Contributions}{16}{section.6}
+\contentsline {subsection}{\numberline {6.1}Giovanni Gebran}{16}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Nizar Belhassan}{16}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Kai Nicoll-Griffith}{16}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Stephen Prizio}{16}{subsection.6.4}

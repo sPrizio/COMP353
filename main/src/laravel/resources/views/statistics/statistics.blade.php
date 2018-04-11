@@ -96,6 +96,9 @@
                 <p class="attribute">
                     Total Hours: {{ $pro_tot_hr[0]->{'Count'} }}
                 </p>
+                <p class="attribute">
+                    Weekly Pay: ${{ $weekly[0]->{'Pay'} }}
+                </p>
             </div>
         </div>
         <div class="col l6 m12 s12">

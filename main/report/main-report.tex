@@ -95,9 +95,15 @@ The strong relation `project\_located\_in` creates the assumption that a project
 \subsection{department\_located\_in relation}
 The associative entity `project\_located\_in` creates the assumption that a `department` can be positioned in many `locations` while at the same time a `location` can be assigned to many `departments` in a many:many relationship.
 
-	\section{ER to Relation conversion }
+\pagebreak
+
+\section{ER to Relation conversion }
+
+\pagebreak
 
 \section {Normalization steps and assumptions}
+
+\pagebreak
 
 \section{Implemented Functionalities}
 \subsection{Database design}
@@ -126,89 +132,145 @@ While the entity-relation diagram specifies multiple that multiple possible rela
 These three relations were deemed most important and the other relations seen on the E/R diagram have been omitted.
 
 \subsection{Language and tools}
-	The application makes use of the PHP 5.5.9 language due to it's reliable and simple functions for connecting with a MySQL database. In order to more easily input queries on the database and build a modern looking front end system, Lavarel has been used to make development easier which adds additional functionality to and shortcuts to front-end design.\\
+	The application makes use of the PHP 5.5.9 language due to it's reliable and simple functions for connecting with a MySQL database. In order to more easily input queries on the database and build a modern looking front end system, Laravel has been used to make development easier which adds additional functionality to and shortcuts to front-end design.\\
 
 \subsection{Query Functionalities}
-	21 Queries allow the system to select, update and add to the company database. These are in the form of .php filenames found in the source code folder.
-	\subsubsection{delete\_department.php}
-	DELETE FROM department WHERE department.id ='\$id'
-	\subsubsection{get\_all\_projects\_for\_department.php}
-	SELECT responsible\_for.project\_id AS Project\_ID, (SELECT project.name FROM project WHERE responsible\_for.project\_id=project.id) AS Project\_Name FROM responsible\_for WHERE department\_id = \$department\_id
-	\subsubsection{get\_employee\_dependents.php}
-	SELECT dependent.id AS Dependent\_ID, dependent.first\_name, dependent.last\_name FROM dependent, employee WHERE dependent.employee\_id='\$employee\_id' AND employee.id=dependent.employee\_id
-	\subsubsection{get\_employee\_involved\_in\_least\_num\_of\_projects.php}
-	SELECT works\_on.employee\_id, employee.first\_name, employee.last\_name
-	FROM works\_on
-	JOIN employee
-	on employee.id=works\_on.employee\_id
-	Group by employee\_id
-	Order by COUNT(project\_id) ASC
-	LIMIT 1
-	\subsubsection{get\_employee\_involved\_in\_most\_num\_of\_projects.php}
-	SELECT works\_on.employee\_id, employee.first\_name, employee.last\_name
-	FROM works\_on
-	JOIN employee
-	on employee.id=works\_on.employee\_id
-	Group by employee\_id
-	Order by COUNT(project\_id) Desc
-	LIMIT 1
-	\subsubsection{get\_employee\_supervisor.php}
-	SELECT role.supervisor\_id AS Supervisor\_ID, (SELECT first\_name FROM employee WHERE role.supervisor\_id=employee.id ) AS First\_Name, (SELECT last\_name FROM employee WHERE role.supervisor\_id=employee.id ) AS Last\_Name FROM role, employee WHERE role.employee\_id='\$employee\_id' AND employee.id=role.employee\_id
-	\subsubsection{get\_employees\_who\_work\_on\_a\_project.php}
-	SELECT employee.id AS Manager\_ID,employee.first\_name, employee.last\_name FROM department JOIN responsible\_for ON department.id=responsible\_for.department\_id JOIN employee ON employee.id=department.manager\_id JOIN works\_on ON works\_on.project\_id=responsible\_for.project\_id AND works\_on.employee\_id=department.manager\_id
-	\subsubsection{get\_hours\_worked\_employee.php}
-	SELECT hours\_worked FROM works\_on, employee WHERE employee.id = '\$employee\_id' AND project\_id = '\$project\_id' AND employee.id=works\_on.employee\_id
-	\subsubsection{get\_how\_much\_employee\_gets.php}
-	SELECT employee.salary FROM employee WHERE employee.id=\$employee\_id
-	\subsubsection{get\_project\_location.php}
-	SELECT project.location\_id AS Location\_ID, (SELECT location.name FROM location WHERE project.location\_id=location.id) AS Location\_name, (SELECT location.address FROM location WHERE project.location\_id=location.id) AS Address FROM project WHERE project.id =\$project\_id
-	\subsubsection{get\_total\_hours\_worked\_for\_project.php}
-	SELECT SUM(works\_on.hours\_worked) AS total\_hours FROM works\_on WHERE works\_on.project\_id =\$project\_id
-	\subsubsection{get\_total\_pay\_for\_each\_project.php}
-	SELECT works\_on.hours\_worked, works\_on.employee\_id, employee.salary From works\_on, employee Where  works\_on.project\_id=2 AND employee.id=works\_on.employee\_id
-	\subsubsection{insert\_department.php}
-	INSERT INTO department (id, name, manager\_id, manager\_start\_date) VALUES ('\$id','\$name','\$manager\_id','\$manager\_start\_date')
-	\subsubsection{insert\_dependent.php}
-	INSERT INTO dependent (id, first\_name, last\_name, sin, date\_of\_birth, gender, employee\_id) VALUES ('\$id', '\$first\_name', '\$last\_name', '\$sin', '\$date\_of\_birth','\$gender', '\$employee\_id')
-	\subsubsection{insert\_employee.php}
-	INSERT INTO employee (id, first\_name, last\_name, sin, date\_of\_birth, address, phone, salary, gender, department\_id) VALUES ('\$id', '\$first\_name', '\$last\_name', '\$sin', '\$date\_of\_birth', '\$address', '\$phone', '\$salary', '\$gender', '\$department\_id')
-	\subsubsection{insert\_located\_in.php}
-	INSERT INTO located\_in (location\_id, department\_id) VALUES ('\$location\_id', '\$department\_id')
-	\subsubsection{insert\_location.php}
-	INSERT INTO location (id, name, address) VALUES ('\$id', '\$name','\$address')
-	\subsubsection{insert\_project.php}
-	INSERT INTO project (id, name, location\_id, phase) VALUES ('\$id', '\$name','\$location\_id', '\$phase')
-	\subsubsection{insert\_responsible\_for.php}
-	INSERT INTO responsible\_for (project\_id, department\_id) VALUES ('\$project\_id', '\$department\_id')
-	\subsubsection{insert\_role.php}
-	INSERT INTO role (employee\_id, supervisor\_id) VALUES ('\$employee\_id', '\$supervisor\_id')
-	\subsubsection{insert\_works\_on.php}
-	INSERT INTO works\_on (project\_id, employee\_id, hours\_worked) VALUES ('\$project\_id','\$employee\_id', '\$hours\_worked')
+	Queries allow the system to select, update, modify and add to the company database whilst also providing key information. All of these queries can be found in /laravel/app/http/routes.php while some can also be found in the .php files found in /queries - forms. The \textit{?} and \textit{:id} fields are instances where a dynamic value would be inserted by the Laravel controllers that have been implemented. These dynamic values are captured from a user's input.
+	\subsubsection{Department}
+	\begin{enumerate}
+		\item Select a single department\\ SELECT * \\FROM department \\WHERE id = :id;
+		\item Select all departments \\SELECT * \\FROM department \\ORDER BY id;
+		\item Select a department's locations\\SELECT * \\FROM located\_in, location \\ WHERE location\_id = id AND department\_id = :id;
+		\item Select a department's projects \\SELECT *\\ FROM responsible\_for, project \\WHERE project\_id = id AND department\_id = :id\\ ORDER BY project\_id;
+		\item Select all employees for a department \\SELECT * \\FROM employee \\WHERE department\_id = :id \\ORDER BY last\_name;
+		\item Select a department's total pay as a function of employee's salary and hours worked\\SELECT SUM(salary * hours\_worked) as 'Pay', department\_id \\FROM works\_on, employee, project \\WHERE employee\_id = employee.id AND project\_id = project.id AND department\_id=:id \\GROUP BY department\_id;
+		\item Select locations that a department is not in\\SELECT * \\FROM location \\WHERE id NOT IN (SELECT location\_id FROM located\_in WHERE department\_id = :id);
+		\item Add location to a department \\INSERT INTO located\_in(location\_id, department\_id) VALUES (?, ?);
+		\item Delete department location \\DELETE FROM located\_in WHERE department\_id = ? AND location\_id = ?; 
+		\item Delete a project from department \\DELETE FROM responsible\_for WHERE department\_id = ? AND project\_id = ?;
+		\item Select projects without a department \\SELECT * \\FROM project \\WHERE id NOT IN (SELECT project\_id FROM responsible\_for);
+		\item Add project to a department\\INSERT INTO responsible\_for(department\_id, project\_id) VALUES (?, ?);
+		\item Create a deaprtment\\INSERT INTO department(name, manager\_id, manager\_start\_date) VALUES (?, ?, ?);
+		\item Edit a department \\UPDATE department SET name = ?, manager\_id = ?, manager\_start\_date = ? WHERE id = ?;
+		\item Delete a department \\DELETE FROM department WHERE id = :id;
+	\end{enumerate}
+
+	\subsubsection{Employee}
+	\begin{enumerate}
+		\item Select a single employee \\SELECT * \\FROM employee \\WHERE id = :id;
+		\item Select all employees \\SELECT * \\FROM employee \\ORDER BY id;
+		\item Select an employee's dependents\\SELECT * \\FROM dependent \\WHERE employee\_id = :id \\ORDER BY last\_name;
+		\item Select projects that an employee works on\\SELECT * \\FROM project, works\_on \\WHERE id = works\_on.project\_id AND works\_on.employee\_id = :id;
+		\item Create an employee \\INSERT INTO employee (first\_name, last\_name, sin, date\_of\_birth, address, phone, salary, gender, department\_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+		\item Edit an employee \\UPDATE employee SET first\_name = ?, last\_name = ?, sin = ?, date\_of\_birth = ?, address = ?, phone = ?, salary = ?, gender = ?, department\_id = ? WHERE id = ?;
+		\item Delete an employee\\DELETE FROM employee WHERE id = :id;
+		\item Select all dependents \\SELECT * FROM dependent WHERE id = :id;
+		\item Create a dependent \\INSERT INTO dependent(first\_name, last\_name, sin, date\_of\_birth, gender, employee\_id) VALUES (?, ?, ?, ?, ?, ?);
+		\item Edit a dependent \\UPDATE dependent SET first\_name = ?, last\_name = ?, sin = ?, date\_of\_birth = ?, gender = ? WHERE id = ?;
+		\item Delete a dependent \\DELETE FROM dependent WHERE id = :id;
+	\end{enumerate}
+
+	\subsubsection{Supervisor}
+	\begin{enumerate}
+		\item Select an employee's supervisor\\SELECT * \\FROM role, employee \\WHERE employee.id = supervisor\_id AND employee\_id = :id;
+		\item Select a supervisor's subordinates \\SELECT * \\FROM employee \\WHERE id IN (SELECT employee\_id FROM role WHERE supervisor\_id = :id);
+		\item Select employees that are not supervisors \\SELECT * \\FROM employee \\WHERE id NOT IN (SELECT supervisor\_id FROM role) \\ORDER BY last\_name;
+		\item Select all supervisors \\SELECT * \\FROM employee \\WHERE id IN (SELECT supervisor\_id FROM role);
+		\item Select a supervisor\\SELECT * \\FROM employee \\WHERE id = (SELECT DISTINCT supervisor\_id FROM role WHERE supervisor\_id = :id);
+		\item Create a supervisor \\INSERT INTO role(employee\_id, supervisor\_id) VALUES (?, ?);
+		\item Select employees without supervisors SELECT * FROM employee WHERE id NOT IN (SELECT employee\_id FROM role) AND id $<$$>$ :id;
+		\item Delete a subordinate \\DELETE FROM role WHERE employee\_id = ? AND supervisor\_id = ?;
+		\item Delete a supervisor \\DELETE FROM role WHERE supervisor\_id = :id;
+	\end{enumerate}
+
+	\subsubsection{Projects}
+	\begin{enumerate}
+		\item Select all projects \\SELECT * \\FROM project \\ORDER BY id;
+		\item Select a single project \\SELECT * \\FROM project \\WHERE id = :id;
+		\item Select a project's department \\SELECT * \\FROM responsible\_for, department \\WHERE department\_id = id AND project\_id = :id;
+		\item Select all employees for a project \\SELECT * \\FROM works\_on, employee \\WHERE id = employee\_id AND project\_id = :id \\ORDER BY id;
+		\item Select number of employees for a given project \\SELECT COUNT(id) \\FROM works\_on, employee \\WHERE id = employee\_id AND project\_id = :id;
+		\item Select total number of hours worked on a project \\SELECT SUM(hours\_worked) \\FROM works\_on, employee \\WHERE id = employee\_id AND project\_id = :id;
+		\item Select a project's total pay \\SELECT SUM(Pay) \\FROM (SELECT works\_on.hours\_worked, works\_on.employee\_id, employee.salary, (hours\_worked * salary) AS Pay \\FROM works\_on, employee \\WHERE  works\_on.project\_id=:id AND employee.id=works\_on.employee\_id) as Payed; 
+		\item Create a project \\INSERT INTO project(name, location\_id, phase) VALUES (?, ?, ?);
+		\item Edit a project \\UPDATE project SET name = ?, location\_id = ?, phase = ? WHERE id = ?; 
+		\item Delete a project \\DELETE FROM project WHERE id = :id;
+		\item Select employees not assigned to a project \\SELECT * \\FROM employee \\WHERE id NOT IN (SELECT employee\_id FROM works\_on);
+		\item Add an employee to a project \\INSERT INTO works\_on(project\_id, employee\_id, hours\_worked) VALUES (?, ?, ?);
+		\item Select an employee working on a project \\SELECT * \\FROM works\_on \\WHERE employee\_id = :eid AND project\_id = :id;
+		\item Edit an employee who is working on a project \\UPDATE works\_on SET hours\_worked = ? WHERE employee\_id = ? AND project\_id = ?; 
+		\item Delete an employee from a project \\DELETE FROM works\_on WHERE employee\_id = :eid AND project\_id = :id;
+	\end{enumerate}
+
+	\subsubsection{Location}
+	\begin{enumerate}
+		\item Select a single location \\SELECT * \\FROM location \\WHERE id = :id;
+		\item Select all locations \\SELECT * \\FROM location \\ORDER BY id;
+		\item Select a location's departments \\SELECT * \\FROM department \\WHERE id IN (SELECT department\_id FROM located\_in WHERE location\_id = :id);
+		\item Select a location's projects \\SELECT * \\FROM project \\WHERE id IN (SELECT project\_id FROM responsible\_for WHERE department\_id IN (SELECT department\_id FROM located\_in WHERE location\_id = :id)) AND location\_id = :id2;
+		\item Create a location \\INSERT INTO location(name, address) VALUES (?, ?); 
+		\item Edit a location \\UPDATE location SET name = ?, address = ? WHERE id = ?;
+		\item Delete a location \\DELETE FROM location WHERE id = :id;
+	\end{enumerate}
+
+	\subsubsection{Statistics}
+	\begin{enumerate}
+		\item Select count of departments \\SELECT COUNT(id) \\FROM department;
+		\item Select count of employees \\SELECT COUNT(id) \\FROM employee;
+		\item Select count of projects \\SELECT COUNT(id) \\FROM project; 
+		\item Select count of locations \\SELECT COUNT(id) \\FROM location;
+		\item Select department with the most employees \\SELECT COUNT(department\_id) as 'Count', department\_id \\FROM employee \\GROUP BY department\_id \\ORDER BY COUNT(department\_id) DESC LIMIT 1;
+		\item Select department with the least employees \\SELECT COUNT(department\_id) as 'Count', department\_id \\FROM employee \\GROUP BY department\_id \\ORDER BY COUNT(department\_id) ASC LIMIT 1;
+	\pagebreak
+		\item Select department with the most projects \\SELECT COUNT(project\_id) as 'Count', department\_id \\FROM responsible\_for \\GROUP BY department\_id \\ORDER BY COUNT(department\_id) DESC LIMIT 1;
+		\item Select department with the least projects \\SELECT COUNT(project\_id) as 'Count', department\_id \\FROM responsible\_for \\GROUP BY department\_id \\ORDER BY COUNT(department\_id) ASC LIMIT 1;
+		\item Select department with the highest pay \\SELECT SUM(salary * hours\_worked) as 'Pay', department\_id \\FROM works\_on, employee, project \\WHERE employee\_id = employee.id AND project\_id = project.id \\GROUP BY department\_id \\ORDER BY SUM(salary * hours\_worked) DESC LIMIT 1;
+		\item Select department with the lowest pay \\SELECT SUM(salary * hours\_worked) as 'Pay', department\_id \\FROM works\_on, employee, project \\WHERE employee\_id = employee.id AND project\_id = project.id \\GROUP BY department\_id \\ORDER BY SUM(salary * hours\_worked) ASC LIMIT 1;
+		\item Select project with the highest pay \\SELECT project\_id, project.name, SUM(salary * hours\_worked) as 'Pay' \\FROM works\_on, employee, project \\WHERE employee\_id = employee.id AND project\_id = project.id \\GROUP BY project\_id \\ORDER BY SUM(salary * hours\_worked) DESC LIMIT 1;
+		\item Select project with the lowest pay \\SELECT project\_id, project.name, SUM(salary * hours\_worked) as 'Pay' \\FROM works\_on, employee, project \\WHERE employee\_id = employee.id AND project\_id = project.id \\GROUP BY project\_id \\ORDER BY SUM(salary * hours\_worked) ASC LIMIT 1;
+		\item Select project with the most employees \\SELECT project\_id, COUNT(employee\_id) as 'Count', project.name \\FROM works\_on, project \\WHERE project\_id = project.id \\GROUP BY project\_id \\ORDER BY COUNT(employee\_id) DESC LIMIT 1;
+		\item Select project with the least employees \\SELECT project\_id, COUNT(employee\_id) as 'Count', project.name \\FROM works\_on, project \\WHERE project\_id = project.id \\GROUP BY project\_id \\ORDER BY COUNT(employee\_id) ASC LIMIT 1;
+	\pagebreak
+		\item Select the total pay for the whole company \\SELECT SUM(Pay) \\FROM (SELECT project\_id, project.name, SUM(salary * hours\_worked) as Pay \\FROM works\_on, employee, project \\WHERE employee\_id = employee.id AND project\_id = project.id \\GROUP BY project\_id) AS P;
+		\item Select the company's weekly pay \\SELECT SUM(40*department\_cost\_per\_hour) AS Pay \\FROM department\_cost;\\ \\ ** This query is based off a custom view built on the database ** \\ \\ View creation: \\ CREATE VIEW department\_cost AS\\ SELECT department\_id, SUM(salary) AS department\_cost\_per\_hour \\FROM department,employee \\WHERE 									department.id=employee.department\_id \\GROUP BY department\_id;
+		\item Select total project hours \\SELECT SUM(hours\_worked) as 'Count' \\FROM works\_on; total project hours;
+		\item Select employee with the most projects \\SELECT COUNT(project\_id) as 'Count', works\_on.employee\_id, employee.first\_name, employee.last\_name \\FROM works\_on \\JOIN employee ON employee.id=works\_on.employee\_id \\GROUP BY employee\_id \\ORDER BY COUNT(project\_id) DESC LIMIT 1;
+		\item Select employee with the least projects \\SELECT COUNT(project\_id) as 'Count', works\_on.employee\_id, employee.first\_name, employee.last\_name \\FROM works\_on \\JOIN employee ON employee.id=works\_on.employee\_id \\GROUP BY employee\_id \\ORDER BY COUNT(project\_id) ASC LIMIT 1;
+		\item Select supervisor with the most subordinates \\SELECT COUNT(employee\_id) as 'Count', supervisor\_id, first\_name, last\_name \\FROM role, employee \\WHERE supervisor\_id = id \\GROUP BY supervisor\_id \\ORDER BY COUNT(employee\_id) DESC LIMIT 1;
+		\item Select supervisor with the least subordinates \\SELECT COUNT(employee\_id) as 'Count', supervisor\_id, first\_name, last\_name \\FROM role, employee \\WHERE supervisor\_id = id \\GROUP BY supervisor\_id \\ORDER BY COUNT(employee\_id) ASC LIMIT 1;
+		\item Select total salary per hour \\SELECT SUM(salary) as 'Count' \\FROM employee;
+		\item Select location with the most projects \\SELECT location\_id, location.name, COUNT(project.id) as 'Count' \\FROM project, location \\WHERE project.id IN (SELECT project\_id FROM responsible\_for WHERE department\_id IN (SELECT department\_id FROM located\_in)) AND location\_id = location.id \\GROUP BY location\_id \\ORDER BY COUNT(project.id) DESC LIMIT 1;
+		\item Select location with the least projects \\SELECT location\_id, location.name, COUNT(project.id) as 'Count' \\FROM project, location \\WHERE project.id IN (SELECT project\_id FROM responsible\_for WHERE department\_id IN (SELECT department\_id FROM located\_in)) AND location\_id = location.id \\GROUP BY location\_id \\ORDER BY COUNT(project.id) ASC LIMIT 1;
+	\end{enumerate}
 	
-\section{contributions}
+\pagebreak
+
+\section{Contributions}
 \subsection{Giovanni Gebran}
  \begin{itemize}
 \item Database Design
+\item Functional Dependencies
 \end{itemize}
 \subsection{Nizar Belhassan}
  \begin{itemize}
 \item Database Design
-\item Majority of Queries
+\item Query Implementations
 \end{itemize}
 \subsection{Kai Nicoll-Griffith}
  \begin{itemize}
 \item Database Design
 \item Database Attribute Refinements
-\item Report setup and latex entry
+\item Report Setup and LateX entry
 \item Report: ER Diagram
-\item Report: Constraints and assumptions
-\item Report: Functionalities
+\item Report: Constraints and Assumptions
+\item Report: Query Functionalities
 \end{itemize}
 \subsection{Stephen Prizio}
  \begin{itemize}
 	\item Database Design
-	\item Front end Lazarel design
-	\item SQL sample data and database 
-	\item Minority of Queries
+	\item Laravel Application Development
+	\item SQL sample data and Database 
+	\item Query Implementations
+	\item Report: Query Functionalities
 \end{itemize}
 \end{document}

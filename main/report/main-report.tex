@@ -112,9 +112,9 @@ The associative entity `project\_located\_in` creates the assumption that a `dep
 \begin{itemize}[]
 
 	\item 	Department(\uline{id:uint}, name:varchar, manager\_id:uint, manager\_start\_date:date)
-	\item 	Dependent(id:uint, first\_name:varchar, last\_name:varchar, sin:uint, date\_of\_birth:date, gender:char, employee\_id:uint)
+	\item 	Dependent(\uline{id:uint}, first\_name:varchar, last\_name:varchar, sin:uint, date\_of\_birth:date, gender:char, employee\_id:uint)
 	\item 	Employee(\uline{id:uint}, first\_name:varchar, last\_name:varchar, sin:uint, date\_of\_birth:date, address:varchar, phone:char, salary:unsigned-decimal, gender:char, department\_id:uint)
-		\item Project(id:uint, name:varchar, location\_id, phase:varchar)
+		\item Project(\uline{id:uint}, name:varchar, location\_id, phase:varchar)
 		\item Location(\uline{id:uint}, name:varchar, address:mediumtext)
 		\item Role(\uline{employee\_id:uint}, supervisor\_id:uint)
 		\item Works\_on(project\_id:uint, employee\_id:uint, hours\_worked:uint)

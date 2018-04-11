@@ -1,0 +1,31 @@
+\BOOKMARK [1][-]{section.1}{Entity Relationship Diagram}{}% 1
+\BOOKMARK [1][-]{section.2}{Reasonable Assumptions}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{general cases}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{department table}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{employee table}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{project table}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{dependent table}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{location table}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.7}{supervised\137by table}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.8}{depends\137on relation}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.9}{works\137on relation}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.10}{works\137in relation}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.11}{responsible\137for relation}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.12}{project\137located\137in relation}{section.2}% 14
+\BOOKMARK [2][-]{subsection.2.13}{department\137located\137in relation}{section.2}% 15
+\BOOKMARK [1][-]{section.3}{ER to Relation conversion }{}% 16
+\BOOKMARK [1][-]{section.4}{Implemented Functionalities}{}% 17
+\BOOKMARK [2][-]{subsection.4.1}{Database design}{section.4}% 18
+\BOOKMARK [2][-]{subsection.4.2}{Language and tools}{section.4}% 19
+\BOOKMARK [2][-]{subsection.4.3}{Query Functionalities}{section.4}% 20
+\BOOKMARK [3][-]{subsubsection.4.3.1}{Department}{subsection.4.3}% 21
+\BOOKMARK [3][-]{subsubsection.4.3.2}{Employee}{subsection.4.3}% 22
+\BOOKMARK [3][-]{subsubsection.4.3.3}{Supervisor}{subsection.4.3}% 23
+\BOOKMARK [3][-]{subsubsection.4.3.4}{Projects}{subsection.4.3}% 24
+\BOOKMARK [3][-]{subsubsection.4.3.5}{Location}{subsection.4.3}% 25
+\BOOKMARK [3][-]{subsubsection.4.3.6}{Statistics}{subsection.4.3}% 26
+\BOOKMARK [1][-]{section.5}{Contributions}{}% 27
+\BOOKMARK [2][-]{subsection.5.1}{Giovanni Gebran}{section.5}% 28
+\BOOKMARK [2][-]{subsection.5.2}{Nizar Belhassan}{section.5}% 29
+\BOOKMARK [2][-]{subsection.5.3}{Kai Nicoll-Griffith}{section.5}% 30
+\BOOKMARK [2][-]{subsection.5.4}{Stephen Prizio}{section.5}% 31

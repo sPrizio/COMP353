@@ -51,9 +51,7 @@
 	
 
 	\begin{titlepage}
-\iffalse
 \tikz[remember picture,overlay] \node[opacity=1.0,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{originality.jpg}};
-\fi
 \end{titlepage}
 	
 		\maketitle
@@ -95,8 +93,17 @@ The strong relation `project\_located\_in` creates the assumption that a project
 \subsection{department\_located\_in relation}
 The associative entity `project\_located\_in` creates the assumption that a `department` can be positioned in many `locations` while at the same time a `location` can be assigned to many `departments` in a many:many relationship.
 
-	\section{ER to Relation conversion }
+\section{ER to Relation conversion }
 
+Department(\uline{id}, name, manager\_id, manager\_start\_date)\\
+Dependent(\uline{id}, first\_name, last\_name, sin, date\_of\_birth, gender, employee\_id)\\
+Employee(\uline{id}, first\_name, last\_name, sin, date\_of\_birth, address, phone, salary, gender, department\_id)\\
+Project(\uline{id}, name, location\_id, phase)\\
+Location(\uline{id}, name, address)\\
+Role(\uline{employee\_id}, \uline{supervisor\_id})\\
+Works\_on(project\_id, employee\_id, hours\_worked)\\
+Located\_in(location\_id, department\_id)\\
+Responsible\_for(department\_id, project\_id)\\
 \section {Normalization steps and assumptions}
 
 \section{Implemented Functionalities}
@@ -199,10 +206,10 @@ These three relations were deemed most important and the other relations seen on
  \begin{itemize}
 \item Database Design
 \item Database Attribute Refinements
-\item Report setup and latex entry
+\item Report setup and latex
 \item Report: ER Diagram
 \item Report: Constraints and assumptions
-\item Report: Functionalities
+\item Report: Functionalities and query entry
 \end{itemize}
 \subsection{Stephen Prizio}
  \begin{itemize}
@@ -210,5 +217,6 @@ These three relations were deemed most important and the other relations seen on
 	\item Front end Lazarel design
 	\item SQL sample data and database 
 	\item Minority of Queries
+	\item Report: Query entry
 \end{itemize}
 \end{document}

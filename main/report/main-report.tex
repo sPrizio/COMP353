@@ -1,4 +1,4 @@
-\documentclass[11pt,letterpaper]{article}
+\documentclass[fleqn, 11pt,letterpaper]{article}
 %% Coverpage Packs
 \usepackage{wallpaper}
 
@@ -53,9 +53,12 @@
 		\newcommand{\graphicwidth}{18.5cm}
 	\section{Entity Relationship Diagram}
 \hspace*{-1.1cm}\includegraphics[width=\graphicwidth]{erd.png}
+
+\pagebreak
+
 	\section{Reasonable Assumptions}
-		\subsection{general cases}
-	An assumption is made that all identification numbers are unsigned integers. An \uline{identification key} will never have a sign so the database restricts this. \\	
+		\subsection{General cases}
+	An assumption has been made that all identification numbers are unsigned integers. An \uline{identification key} will never have a sign so the database restricts this. \\	
 	
 	\subsection{department table}
 	In the case of the `department` table, both the \uline{manager\_id} and \uline{manager\_start\_date} are given the opportunity to be null since it is not always true that a `department` needs a manager. Small groups could potentially self manage if that is the policy of the company. \\
@@ -72,7 +75,7 @@ The `dependent` table holds vital information that has potential legal importanc
 In order to specify where a `project` or `department` is situated, a `location` table keeps track of all of the possible locations where departments and projects operate. An entity table will therefore use a relation table holding an unsigned \uline{location\_id} to specify where the department or project is located in both address and an optional name. The \uline{name} is assumed to be used for employee convenience to identify a location while a mandatory \uline{address} is used for more direct positioning and referencing(as would be used by a post office). The \uline{name} is a varchar, while the \uline{address} is medium text since it is assumed that the address could be as specific as country down to room number and limitations on varchar size could be problematic.\\
 
 \subsection{supervised\_by table}
-The `supervised\_by table` defines a role of being a subordinate to someone and helps to give information about the status of an employee in the business hierarchy. Supervision does not imply that an employee is a manager and it could be that an employee both supervises and manages a `department`. It is assumed that this relation is solely used to show the hierarchy of employees within the company. To recognize the `employee` who is supervised, each employee is given a single \uline{supervisor\_id} with a 1:1 multiplicity. Our assumption is that an employee should only be supervised by one person or none at all therefore \uline{employee \_id} is a primary key enforcing uniqueness while \uline{supervisor\_id} is a default null value, where null implies an `employee` is unsupervised.\\
+The `supervised\_by table` defines a role of being a subordinate to someone and helps to give information about the status of an employee in the business hierarchy. Supervision does not imply that an employee is a manager and it could be that an employee both supervises and manages a `department`. It is assumed that this relation is solely used to show the hierarchy of employees within the company. To recognize the `employee` who is supervised, each employee is given a single \uline{supervisor\_id}, but a supervisor can supervise many. Our assumption is that an employee should only be supervised by one person or none at all therefore \uline{employee \_id} is a primary key enforcing uniqueness on being supervised while \uline{supervisor\_id} is a default null value, where null implies an `employee` is unsupervised.\\
 
 \subsection{depends\_on relation}
 	The weak relation  `depends\_on` creates the assumption an `employee` can have many `dependants` in a 1:many relationship.
@@ -91,17 +94,18 @@ The associative entity `project\_located\_in` creates the assumption that a `dep
 \pagebreak
 
 \section{ER to Relation conversion }
+\begin{itemize}[]
 
-Department(\uline{id}, name, manager\_id, manager\_start\_date)\\
-Dependent(\uline{id}, first\_name, last\_name, sin, date\_of\_birth, gender, employee\_id)\\
-Employee(\uline{id}, first\_name, last\_name, sin, date\_of\_birth, address, phone, salary, gender, department\_id)\\
-Project(\uline{id}, name, location\_id, phase)\\
-Location(\uline{id}, name, address)\\
-Role(\uline{employee\_id}, \uline{supervisor\_id})\\
-Works\_on(project\_id, employee\_id, hours\_worked)\\
-Located\_in(location\_id, department\_id)\\
-Responsible\_for(department\_id, project\_id)\\
-
+	\item 	Department(\uline{id:uint}, name:varchar, manager\_id:uint, manager\_start\_date:date)
+	\item 	Dependent(id:uint, first\_name:varchar, last\_name:varchar, sin:uint, date\_of\_birth:date, gender:char, employee\_id:uint)
+	\item 	Employee(\uline{id:uint}, first\_name:varchar, last\_name:varchar, sin:uint, date\_of\_birth:date, address:varchar, phone:char, salary:unsigned-decimal, gender:char, department\_id:uint)
+		\item Project(id:uint, name:varchar, location\_id, phase:varchar)
+		\item Location(\uline{id:uint}, name:varchar, address:mediumtext)
+		\item Role(\uline{employee\_id:uint}, supervisor\_id:uint)
+		\item Works\_on(project\_id:uint, employee\_id:uint, hours\_worked:uint)
+	\item 	Located\_in(location\_id:uint, department\_id:uint)
+	\item 	Responsible\_for(department\_id:uint, project\_id:uint)
+\end{itemize}
 \pagebreak
 
 \section{Implemented Functionalities}
@@ -244,11 +248,32 @@ These three relations were deemed most important and the other relations seen on
 	
 \pagebreak
 
+\section{Normalization Steps and Assumptions}
+
+\subsection{Functional Dependencies}
+\setlength{\mathindent}{-0.5cm}
+\scriptsize
+\begin{tabular}{l l l l l}
+$F(employee) $ 			&  $\equiv $	&$employee.id, sin 	$			& $\rightarrow$ &  $first\_name, last\_name,date\_of\_birth,address,phone,salary,gender$\\
+$F(dependent)  $		&  $\equiv$		&$ dependent.id,sin		$		& $\rightarrow$ & $first\_name,last\_name,date\_of\_birth,gender $\\ 
+$F(department) 	$		&  $\equiv$		& $department.id,name, manager\_id $	& $\rightarrow$ & $manager\_start\_date$\\
+$F(project)  	$		&  $\equiv$		& $project.id,name			$	& $\rightarrow$ & $location\_id,phase$\\
+$F(supervised\_by) $	&  $\equiv$		&$ employee\_id 		$		& $\rightarrow$ & $supervisor\_id$\\
+$F(location)	$	 	&  $\equiv $	& $location.id,name 	$		& $\rightarrow$ &$ address$\\
+  \end{tabular} \\
+ \normalsize
+\subsection{Normalization Process}
+
+\subsection{Assumptions}
+\subsubsection{Of Functional Dependencies}
+
+\pagebreak
+
 \section{Contributions}
 \subsection{Giovanni Gebran}
  \begin{itemize}
 \item Database Design
-\item Functional Dependencies
+\item Report: Functional Dependencies
 \end{itemize}
 \subsection{Nizar Belhassan}
  \begin{itemize}
@@ -263,6 +288,7 @@ These three relations were deemed most important and the other relations seen on
 \item Report: ER Diagram
 \item Report: Constraints and Assumptions
 \item Report: Query Functionalities
+\item Report: Functional Dependencies \& Normalization
 \end{itemize}
 \subsection{Stephen Prizio}
  \begin{itemize}
@@ -273,6 +299,8 @@ These three relations were deemed most important and the other relations seen on
 	\item Report: Query Functionalities
 
 \end{itemize}
+
+\pagebreak
 
 \tikz[remember picture,overlay] \node[opacity=1.0,inner sep=0pt] at (current page.center){\includegraphics[width=\paperwidth,height=\paperheight]{originality.jpg}};
 \end{document}

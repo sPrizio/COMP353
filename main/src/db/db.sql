@@ -55,14 +55,13 @@ DROP TABLE IF EXISTS `dependent`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `dependent` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `first_name` varchar(512) NOT NULL,
-  `last_name` varchar(512) NOT NULL,
+  `first_name` varchar(255) NOT NULL,
+  `last_name` varchar(255) NOT NULL,
   `sin` int(11) NOT NULL,
   `date_of_birth` date NOT NULL,
   `gender` char(1) NOT NULL,
   `employee_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sin_UNIQUE` (`sin`),
+ PRIMARY KEY(`id`),
   KEY `employee_id_FOREIGN-C` (`employee_id`),
   CONSTRAINT `employee_id_FOREIGN-C` FOREIGN KEY (`employee_id`) REFERENCES `employee` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=303 DEFAULT CHARSET=utf8;
@@ -91,7 +90,7 @@ CREATE TABLE `employee` (
   `last_name` varchar(255) NOT NULL,
   `sin` int(11) unsigned NOT NULL,
   `date_of_birth` date NOT NULL,
-  `address` varchar(512) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `phone` char(12) NOT NULL,
   `salary` decimal(5,2) unsigned NOT NULL,
   `gender` char(1) NOT NULL,
@@ -149,7 +148,7 @@ DROP TABLE IF EXISTS `location`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `location` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(512) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   `address` mediumtext NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
@@ -175,13 +174,12 @@ DROP TABLE IF EXISTS `project`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `project` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(512) NOT NULL,
+  `name` varchar(255) NOT NULL,
   `location_id` int(11) unsigned NOT NULL,
   `phase` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name_UNIQUE` (`name`),
+  PRIMARY KEY(`id`),
   KEY `location_id_FOREIGN-A` (`location_id`),
-  CONSTRAINT `location_id_FOREIGN-A` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE CASCADE
+  CONSTRAINT `location_id_FOREIGN-B` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

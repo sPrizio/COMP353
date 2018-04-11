@@ -1,6 +1,6 @@
 \BOOKMARK [1][-]{section.1}{Entity Relationship Diagram}{}% 1
 \BOOKMARK [1][-]{section.2}{Reasonable Assumptions}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{general cases}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.1}{General cases}{section.2}% 3
 \BOOKMARK [2][-]{subsection.2.2}{department table}{section.2}% 4
 \BOOKMARK [2][-]{subsection.2.3}{employee table}{section.2}% 5
 \BOOKMARK [2][-]{subsection.2.4}{project table}{section.2}% 6
@@ -24,8 +24,13 @@
 \BOOKMARK [3][-]{subsubsection.4.3.4}{Projects}{subsection.4.3}% 24
 \BOOKMARK [3][-]{subsubsection.4.3.5}{Location}{subsection.4.3}% 25
 \BOOKMARK [3][-]{subsubsection.4.3.6}{Statistics}{subsection.4.3}% 26
-\BOOKMARK [1][-]{section.5}{Contributions}{}% 27
-\BOOKMARK [2][-]{subsection.5.1}{Giovanni Gebran}{section.5}% 28
-\BOOKMARK [2][-]{subsection.5.2}{Nizar Belhassan}{section.5}% 29
-\BOOKMARK [2][-]{subsection.5.3}{Kai Nicoll-Griffith}{section.5}% 30
-\BOOKMARK [2][-]{subsection.5.4}{Stephen Prizio}{section.5}% 31
+\BOOKMARK [1][-]{section.5}{Normalization Steps and Assumptions}{}% 27
+\BOOKMARK [2][-]{subsection.5.1}{Functional Dependencies}{section.5}% 28
+\BOOKMARK [2][-]{subsection.5.2}{Normalization Process}{section.5}% 29
+\BOOKMARK [2][-]{subsection.5.3}{Assumptions}{section.5}% 30
+\BOOKMARK [3][-]{subsubsection.5.3.1}{Of Functional Dependencies}{subsection.5.3}% 31
+\BOOKMARK [1][-]{section.6}{Contributions}{}% 32
+\BOOKMARK [2][-]{subsection.6.1}{Giovanni Gebran}{section.6}% 33
+\BOOKMARK [2][-]{subsection.6.2}{Nizar Belhassan}{section.6}% 34
+\BOOKMARK [2][-]{subsection.6.3}{Kai Nicoll-Griffith}{section.6}% 35
+\BOOKMARK [2][-]{subsection.6.4}{Stephen Prizio}{section.6}% 36

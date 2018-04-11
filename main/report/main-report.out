@@ -27,10 +27,13 @@
 \BOOKMARK [1][-]{section.5}{Normalization Steps and Assumptions}{}% 27
 \BOOKMARK [2][-]{subsection.5.1}{Functional Dependencies}{section.5}% 28
 \BOOKMARK [2][-]{subsection.5.2}{Normalization Process}{section.5}% 29
-\BOOKMARK [2][-]{subsection.5.3}{Assumptions}{section.5}% 30
-\BOOKMARK [3][-]{subsubsection.5.3.1}{Of Functional Dependencies}{subsection.5.3}% 31
-\BOOKMARK [1][-]{section.6}{Contributions}{}% 32
-\BOOKMARK [2][-]{subsection.6.1}{Giovanni Gebran}{section.6}% 33
-\BOOKMARK [2][-]{subsection.6.2}{Nizar Belhassan}{section.6}% 34
-\BOOKMARK [2][-]{subsection.6.3}{Kai Nicoll-Griffith}{section.6}% 35
-\BOOKMARK [2][-]{subsection.6.4}{Stephen Prizio}{section.6}% 36
+\BOOKMARK [3][-]{subsubsection.5.2.1}{1NF}{subsection.5.2}% 30
+\BOOKMARK [3][-]{subsubsection.5.2.2}{2NF}{subsection.5.2}% 31
+\BOOKMARK [3][-]{subsubsection.5.2.3}{3NF}{subsection.5.2}% 32
+\BOOKMARK [2][-]{subsection.5.3}{Assumptions}{section.5}% 33
+\BOOKMARK [3][-]{subsubsection.5.3.1}{Of Functional Dependencies}{subsection.5.3}% 34
+\BOOKMARK [1][-]{section.6}{Contributions}{}% 35
+\BOOKMARK [2][-]{subsection.6.1}{Giovanni Gebran}{section.6}% 36
+\BOOKMARK [2][-]{subsection.6.2}{Nizar Belhassan}{section.6}% 37
+\BOOKMARK [2][-]{subsection.6.3}{Kai Nicoll-Griffith}{section.6}% 38
+\BOOKMARK [2][-]{subsection.6.4}{Stephen Prizio}{section.6}% 39

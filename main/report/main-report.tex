@@ -43,15 +43,30 @@
 %%Assumption/Constraint Packs
 \usepackage{enumitem}
 
+
+
 \title{Comp353 Project Report}
-\author{Kai Nicoll-Griffith[40012407], Stephen Prizio[40001739], \\Giovanni Gebran[40018637], Nizar Belhassan[27519443]\\\\\bf{Team kzc353\_4}}
+\author{}
 
 \begin{document}
 	
-	
-		\maketitle
-		\newcommand{\graphicwidth}{18.5cm}
+	\iffalse https://en.wikibooks.org/wiki/LaTeX/Title\_Creation \fi
+	\begin{titlepage}
+		\centering
+		{\scshape\LARGE Concordia University \par}
+		\vspace{1cm}
+		{\scshape\Large \par}
+		\vspace{1.5cm}
+		{\huge\bfseries Comp353 Project Report\par}
+		\vspace{2cm}
+		{\Large\scshape Kai Nicoll-Griffith[40012407], Stephen Prizio[40001739], \\Giovanni Gebran[40018637], Nizar Belhassan[27519443]\par}
+		\vspace{2cm}{\Large	Team kzc353\_4\par}
+		\vspace{3cm}
+		{Proffesor N. Shiri\par}
+	\end{titlepage}
+
 	\section{Entity Relationship Diagram}
+			\newcommand{\graphicwidth}{18.5cm}
 \hspace*{-1.1cm}\includegraphics[width=\graphicwidth]{erd.png}
 
 \pagebreak
@@ -72,7 +87,7 @@
 The `dependent` table holds vital information that has potential legal importance so none of these fields may be null. A dependent is linked to an `employee` by a foreign key holding \uline{employee\_id} and has the multiplicity of one to many. An `employee` may have many `dependents`. \\
 
 \subsection{location table}
-In order to specify where a `project` or `department` is situated, a `location` table keeps track of all of the possible locations where departments and projects operate. An entity table will therefore use a relation table holding an unsigned \uline{location\_id} to specify where the department or project is located in both address and an optional name. The \uline{name} is assumed to be used for employee convenience to identify a location while a mandatory \uline{address} is used for more direct positioning and referencing(as would be used by a post office). The \uline{name} is a varchar, while the \uline{address} is medium text since it is assumed that the address could be as specific as country down to room number and limitations on varchar size could be problematic.\\
+In order to specify where a `project` or `department` is situated, a `location` table keeps track of all of the possible locations where departments and projects operate. An entity table will therefore use a relation table holding an unsigned \uline{location\_id} to specify where the department or project is located in both address and an optional name. The \uline{address} is assumed to be used for employee convenience to identify a location while a mandatory \uline{name} is used for more direct positioning and referencing(as would be used by a post office). The \uline{name} is a varchar, while the \uline{address} is medium text since it is assumed that the address could be as specific as country down to room number and limitations on varchar size could be problematic.\\
 
 \subsection{supervised\_by table}
 The `supervised\_by table` defines a role of being a subordinate to someone and helps to give information about the status of an employee in the business hierarchy. Supervision does not imply that an employee is a manager and it could be that an employee both supervises and manages a `department`. It is assumed that this relation is solely used to show the hierarchy of employees within the company. To recognize the `employee` who is supervised, each employee is given a single \uline{supervisor\_id}, but a supervisor can supervise many. Our assumption is that an employee should only be supervised by one person or none at all therefore \uline{employee \_id} is a primary key enforcing uniqueness on being supervised while \uline{supervisor\_id} is a default null value, where null implies an `employee` is unsupervised.\\
@@ -126,7 +141,7 @@ And also the role relation:
 	\item supervised\_by 	
 \end{enumerate}
 Which specifies an employees role against other employees as a supervisor.\\
-While the entity-relation diagram specifies multiple that multiple possible relations can be made, in order to reduce the complexity of the design(and therefore the queries) only the following relations are used
+While the entity-relation diagram specifies multiple that multiple possible relations can be made, in order to reduce the complexity of the design and generate simplicity only the following relations are used.
 \begin{enumerate}[]
 	\item works\_on
 	\item responsible\_for
@@ -254,7 +269,7 @@ These three relations were deemed most important and the other relations seen on
 \setlength{\mathindent}{-0.5cm}
 \scriptsize
 \begin{tabular}{l l l l l}
-$F(employee) $ 			&  $\equiv $	&$employee.id, sin 	$			& $\rightarrow$ &  $first\_name, last\_name,date\_of\_birth,address,phone,salary,gender$\\
+$F(employee) $ 			&  $\equiv $	&$employee.id, sin 	$			& $\rightarrow$ &  $first\_name,last\_name,date\_of\_birth,address,phone,salary,gender$\\
 $F(dependent)  $		&  $\equiv$		&$ dependent.id,sin		$		& $\rightarrow$ & $first\_name,last\_name,date\_of\_birth,gender $\\ 
 $F(department) 	$		&  $\equiv$		& $department.id,name, manager\_id $	& $\rightarrow$ & $manager\_start\_date$\\
 $F(project)  	$		&  $\equiv$		& $project.id,name			$	& $\rightarrow$ & $location\_id,phase$\\
@@ -263,10 +278,19 @@ $F(location)	$	 	&  $\equiv $	& $location.id,name 	$		& $\rightarrow$ &$ address
   \end{tabular} \\
  \normalsize
 \subsection{Normalization Process}
-
+\subsubsection{1NF}
+The tables are in 1st normal form as each column identifies a single value, entries in each column represent the same type of information and each row has a candidate key.
+\subsubsection{2NF}
+The tables depend on the candidate keys for each case therefore the database is in 2nd normal form. Each table has it's lookup tables and attributes in order to determine the relations between data.
+\subsubsection{3NF}
+Of all of the tables, none have situations where they candidate keys do not determine other attributes. Foreign keys are used whenever possible to prevent situations where candidate keys generate subsets within tables.
 \subsection{Assumptions}
 \subsubsection{Of Functional Dependencies}
-
+\begin{itemize}
+	\item An SIN and ID will never repeat in the same table
+	\item In a department the id, name and manager are all unique.
+	\item A location will have a unique id and name tying it to an address.
+\end{itemize}
 \pagebreak
 
 \section{Contributions}
